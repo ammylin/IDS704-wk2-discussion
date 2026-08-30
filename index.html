@@ -30,6 +30,8 @@
         </header>
 
         <main class="stage-stack">
+
+            <!-- ===== STAGE 1: Introduction ===== -->
             <section class="screen active" data-stage="1" id="stage-1">
                 <div class="panel intro-panel">
                     <p class="eyebrow">CLASSROOM CRISIS SIMULATION</p>
@@ -39,53 +41,72 @@
                         you must decide what to do with the genetic database—and live with the consequences.
                     </p>
                     <button class="primary-btn" data-next>START SIMULATION</button>
+                    <p class="disclaimer">
+                        <strong>Reality check:</strong> This simulation is inspired by real events involving
+                        23andMe, but some scenarios, offers, decisions, and consequences are hypothetical and
+                        designed for ethical analysis.
+                    </p>
                 </div>
             </section>
 
+            <!-- ===== STAGE 2: What Data Would You Sell? ===== -->
             <section class="screen" data-stage="2" id="stage-2">
                 <div class="panel">
                     <p class="eyebrow">STAGE 02</p>
                     <h2>WHAT DATA WOULD YOU SELL?</h2>
                     <div class="data-grid" id="data-grid">
-                        <button class="data-card" data-data-type="Genetic / DNA">
+                        <button class="data-card" data-data-type="Genetic / DNA" aria-pressed="false">
                             <span class="icon">🧬</span>
                             <span>Genetic / DNA</span>
                         </button>
-                        <button class="data-card" data-data-type="Health information">
+                        <button class="data-card" data-data-type="Health information" aria-pressed="false">
                             <span class="icon">❤️</span>
                             <span>Health information</span>
                         </button>
-                        <button class="data-card" data-data-type="Location">
+                        <button class="data-card" data-data-type="Location" aria-pressed="false">
                             <span class="icon">📍</span>
                             <span>Location</span>
                         </button>
-                        <button class="data-card" data-data-type="Financial / purchasing information">
+                        <button class="data-card" data-data-type="Financial / purchasing information" aria-pressed="false">
                             <span class="icon">💳</span>
                             <span>Financial / purchasing information</span>
                         </button>
-                        <button class="data-card" data-data-type="Survey responses">
+                        <button class="data-card" data-data-type="Survey responses" aria-pressed="false">
                             <span class="icon">📋</span>
                             <span>Survey responses</span>
                         </button>
-                        <button class="data-card" data-data-type="Family relationships">
+                        <button class="data-card" data-data-type="Family relationships" aria-pressed="false">
                             <span class="icon">👨‍👩‍👧</span>
                             <span>Family relationships</span>
                         </button>
-                        <button class="data-card" data-data-type="Voice data">
+                        <button class="data-card" data-data-type="Voice data" aria-pressed="false">
                             <span class="icon">🎤</span>
                             <span>Voice data</span>
                         </button>
-                        <button class="data-card" data-data-type="Facial / biometric data">
+                        <button class="data-card" data-data-type="Facial / biometric data" aria-pressed="false">
                             <span class="icon">👁️</span>
                             <span>Facial / biometric data</span>
                         </button>
                     </div>
 
                     <p class="prompt">Which types of data would you be comfortable selling to another company?</p>
+
+                    <div class="discussion-connection">
+                        <p class="connection-label">💬 DISCUSSION CONNECTION</p>
+                        <p>What makes selling one category of data more or less acceptable than another?
+                            Is the problem the <em>type</em> of data, the <em>purpose</em> of the sale, the
+                            user's <em>consent</em>, or something else?</p>
+                        <p class="connection-note">Consider: survey responses and financial data can reveal
+                            deeply personal information. Genetic data carries distinctive implications for
+                            relatives, health, and future identification. No category is automatically
+                            acceptable or unacceptable.</p>
+                    </div>
+
                     <button class="secondary-btn" data-next>CONTINUE</button>
                 </div>
             </section>
 
+            <!-- ===== STAGE 3: Privacy Policy & Consent ===== -->
             <section class="screen" data-stage="3" id="stage-3">
                 <div class="panel policy-panel-wrap">
                     <p class="eyebrow">STAGE 03</p>
@@ -138,11 +159,39 @@
                             <button class="choice-btn" data-consent-understanding="no">NO</button>
                             <button class="choice-btn" data-consent-understanding="depends">IT DEPENDS</button>
                         </div>
+                    </div>
+
+                    <!-- NEW: Confidence rating + Discussion connection (Q2) -->
+                    <div id="confidence-section" class="confidence-section hidden">
+                        <h3>HOW CONFIDENT ARE YOU?</h3>
+                        <p class="prompt secondary">How confident are you that an average user understood
+                            what they were agreeing to?</p>
+                        <div class="confidence-scale">
+                            <button class="confidence-btn" data-confidence="1" aria-label="Not at all confident">
+                                <span class="confidence-level">1</span>Not at all</button>
+                            <button class="confidence-btn" data-confidence="2" aria-label="Slightly confident">
+                                <span class="confidence-level">2</span>Slightly</button>
+                            <button class="confidence-btn" data-confidence="3" aria-label="Somewhat confident">
+                                <span class="confidence-level">3</span>Somewhat</button>
+                            <button class="confidence-btn" data-confidence="4" aria-label="Mostly confident">
+                                <span class="confidence-level">4</span>Mostly</button>
+                            <button class="confidence-btn" data-confidence="5" aria-label="Completely confident">
+                                <span class="confidence-level">5</span>Completely</button>
+                        </div>
+
+                        <div class="discussion-connection">
+                            <p class="connection-label">💬 DISCUSSION CONNECTION</p>
+                            <p>What would <em>meaningful</em> informed consent actually require?</p>
+                            <p class="connection-note">Signing a legal document and truly understanding what
+                                you're agreeing to are not necessarily the same thing. What would bridge that gap?</p>
+                        </div>
+
                         <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
                     </div>
                 </div>
             </section>
 
+            <!-- ===== STAGE 4: Bankruptcy Crisis + Tradeoffs ===== -->
             <section class="screen" data-stage="4" id="stage-4">
                 <div class="panel danger-panel">
                     <p class="eyebrow red">BREAKING NEWS</p>
@@ -159,10 +208,20 @@
                     </div>
 
                     <div id="bankruptcy-summary" class="selection-box hidden"></div>
+
+                    <!-- NEW: Tradeoff visualization -->
+                    <div id="tradeoff-panel" class="tradeoff-panel hidden">
+                        <h3>TRADEOFFS</h3>
+                        <div class="tradeoff-grid" id="tradeoff-grid"></div>
+                        <p class="tradeoff-reflection">Ethical decisions often involve competing values.
+                            What are you willing to trade away?</p>
+                    </div>
+
                     <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
                 </div>
             </section>
 
+            <!-- ===== STAGE 5: Twists + Ethical Obligations (Q3) ===== -->
             <section class="screen" data-stage="5" id="stage-5">
                 <div class="panel">
                     <p class="eyebrow">STAGE 05</p>
@@ -182,13 +241,41 @@
 
                     <div class="twist-controls">
                         <button id="reveal-next-twist" class="secondary-btn">REVEAL NEXT TWIST</button>
-                        <button id="continue-after-twists" class="secondary-btn hidden" data-next>CONTINUE</button>
+                        <!-- Changed: removed data-next so we can show obligations first -->
+                        <button id="continue-after-twists" class="secondary-btn hidden">CONTINUE</button>
                     </div>
 
                     <div id="twist-summary" class="selection-box hidden"></div>
+
+                    <!-- NEW: Ethical obligations section (Q3) -->
+                    <div id="obligations-section" class="obligations-section hidden">
+                        <h3>IF YOU BUY THE DATABASE, DO YOU INHERIT THE ORIGINAL COMPANY'S ETHICAL OBLIGATIONS?</h3>
+                        <p class="prompt secondary">Select all positions you agree with.</p>
+                        <div class="obligations-grid" id="obligations-grid">
+                            <button class="obligation-btn" data-obligation="honor" aria-pressed="false">
+                                The buyer should honor the original privacy promises.</button>
+                            <button class="obligation-btn" data-obligation="feasible" aria-pressed="false">
+                                The buyer should honor them only when technically feasible.</button>
+                            <button class="obligation-btn" data-obligation="new-consent" aria-pressed="false">
+                                The buyer should obtain new consent from users.</button>
+                            <button class="obligation-btn" data-obligation="delete-right" aria-pressed="false">
+                                Existing users should have the right to delete their data before transfer.</button>
+                            <button class="obligation-btn" data-obligation="no-transfer" aria-pressed="false">
+                                The data should not be transferable at all.</button>
+                        </div>
+
+                        <div class="discussion-connection">
+                            <p class="connection-label">💬 THINK ABOUT IT</p>
+                            <p>There's a difference between <em>"Can the buyer legally use the data?"</em>
+                                and <em>"Should the buyer ethically be allowed to use the data?"</em></p>
+                        </div>
+
+                        <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
+                    </div>
                 </div>
             </section>
 
+            <!-- ===== STAGE 6: Who Should Control the Data? ===== -->
             <section class="screen" data-stage="6" id="stage-6">
                 <div class="panel">
                     <p class="eyebrow">STAGE 06</p>
@@ -214,83 +301,234 @@
                 </div>
             </section>
 
+            <!-- ===== STAGE 7: Your Own Research – Interactive Commitments ===== -->
             <section class="screen" data-stage="7" id="stage-7">
                 <div class="panel">
                     <p class="eyebrow">STAGE 07</p>
                     <h2>NOW IT'S YOUR DATA.</h2>
-                    <p class="lead small">Imagine you are collecting data for your own research project.</p>
+                    <p class="lead small">Imagine you're collecting data for your own research.
+                        Someone offers you <strong>$1,000,000</strong> for your dataset.<br>
+                        What promises would you want to have made <em>before</em> collecting it?</p>
 
-                    <div class="data-grid mini-grid">
-                        <div class="mini-card"><span>Face recognition</span></div>
-                        <div class="mini-card"><span>Emotion recognition</span></div>
-                        <div class="mini-card"><span>Health prediction</span></div>
-                        <div class="mini-card"><span>Location</span></div>
-                        <div class="mini-card"><span>Voice</span></div>
-                        <div class="mini-card"><span>Behavioral data</span></div>
-                        <div class="mini-card"><span>Biometric data</span></div>
-                        <div class="mini-card"><span>Survey data</span></div>
+                    <p class="prompt secondary">Select all commitments you would make to your participants.</p>
+
+                    <div class="commitments-grid" id="commitments-grid">
+                        <button class="commitment-btn" data-commitment="access" aria-pressed="false">
+                            I will explain who may access the data.</button>
+                        <button class="commitment-btn" data-commitment="future-uses" aria-pressed="false">
+                            I will explain potential future uses.</button>
+                        <button class="commitment-btn" data-commitment="withdraw" aria-pressed="false">
+                            I will allow participants to withdraw.</button>
+                        <button class="commitment-btn" data-commitment="no-sell" aria-pressed="false">
+                            I will not sell the data without additional consent.</button>
+                        <button class="commitment-btn" data-commitment="minimize" aria-pressed="false">
+                            I will minimize the amount of data collected.</button>
+                        <button class="commitment-btn" data-commitment="retention" aria-pressed="false">
+                            I will explain how long the data will be retained.</button>
+                        <button class="commitment-btn" data-commitment="combining" aria-pressed="false">
+                            I will explain whether the data could be combined with other datasets.</button>
+                        <button class="commitment-btn" data-commitment="indirect" aria-pressed="false">
+                            I will protect people who are indirectly identifiable.</button>
+                        <button class="commitment-btn" data-commitment="commercial" aria-pressed="false">
+                            I will tell participants about commercial uses.</button>
                     </div>
 
-                    <div class="discussion-blocks">
-                        <div>
-                            <p class="prompt">What is the WORST thing someone could do with the data you collect?</p>
-                        </div>
-                        <div>
-                            <p class="prompt">What would you promise your participants before collecting it?</p>
-                        </div>
+                    <p id="commitments-count" class="limit-note">0 of 9 commitments selected</p>
+
+                    <div id="commitments-reflection" class="commitments-reflection hidden">
+                        <p>These promises matter most <em>before</em> you collect the data.
+                            Once data exists, changing the rules can be much harder.</p>
+                    </div>
+
+                    <div class="discussion-connection">
+                        <p class="connection-label">💬 DISCUSSION CONNECTION</p>
+                        <p>If we collect sensitive data for our own research, what agreements should
+                            we make with participants when collecting or aggregating that data?</p>
                     </div>
 
                     <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
                 </div>
             </section>
 
+            <!-- ===== STAGE 8: Data Science Constitution – Enhanced ===== -->
             <section class="screen" data-stage="8" id="stage-8">
                 <div class="panel">
                     <p class="eyebrow">STAGE 08</p>
                     <h2>YOU GET TO WRITE THE RULES.</h2>
 
                     <div class="principles-grid" id="principles-grid">
-                        <button class="principle-card" data-principle="CONSENT">CONSENT</button>
-                        <button class="principle-card" data-principle="TRANSPARENCY">TRANSPARENCY</button>
-                        <button class="principle-card" data-principle="CONTROL">CONTROL</button>
-                        <button class="principle-card" data-principle="SECURITY">SECURITY</button>
-                        <button class="principle-card" data-principle="PURPOSE LIMITATION">PURPOSE LIMITATION</button>
-                        <button class="principle-card" data-principle="ACCOUNTABILITY">ACCOUNTABILITY</button>
-                        <button class="principle-card" data-principle="DATA MINIMIZATION">DATA MINIMIZATION</button>
-                        <button class="principle-card" data-principle="HUMAN DIGNITY">HUMAN DIGNITY</button>
+                        <button class="principle-card" data-principle="MEANINGFUL INFORMED CONSENT" aria-pressed="false">
+                            MEANINGFUL INFORMED CONSENT</button>
+                        <button class="principle-card" data-principle="DATA MINIMIZATION" aria-pressed="false">
+                            DATA MINIMIZATION</button>
+                        <button class="principle-card" data-principle="USER CONTROL AND DELETION" aria-pressed="false">
+                            USER CONTROL AND DELETION</button>
+                        <button class="principle-card" data-principle="TRANSPARENCY" aria-pressed="false">
+                            TRANSPARENCY</button>
+                        <button class="principle-card" data-principle="PRIVACY AND SECURITY" aria-pressed="false">
+                            PRIVACY AND SECURITY</button>
+                        <button class="principle-card" data-principle="RESTRICTIONS ON COMMERCIALIZATION" aria-pressed="false">
+                            RESTRICTIONS ON COMMERCIALIZATION</button>
+                        <button class="principle-card" data-principle="RESEARCH / PUBLIC BENEFIT" aria-pressed="false">
+                            RESEARCH / PUBLIC BENEFIT</button>
+                        <button class="principle-card" data-principle="ACCOUNTABILITY" aria-pressed="false">
+                            ACCOUNTABILITY</button>
                     </div>
 
                     <p class="prompt">You can only choose THREE principles that your data science team can NEVER
                         compromise.</p>
                     <p id="principle-limit-note" class="limit-note">Choose up to three.</p>
 
-                    <div id="constitution-panel" class="constitution-panel hidden">
-                        <h3>OUR DATA SCIENCE CONSTITUTION</h3>
-                        <div id="constitution-list" class="constitution-list"></div>
+                    <!-- NEW: Ranking section -->
+                    <div id="ranking-section" class="ranking-section hidden">
+                        <h3>YOU CAN ONLY PROTECT THREE THINGS. WHAT COMES FIRST?</h3>
+                        <p class="prompt secondary">Click your principles in order from most to least important.</p>
+
+                        <div class="rank-slots" id="rank-slots">
+                            <div class="rank-slot" data-rank="0" role="button" tabindex="0"
+                                aria-label="First priority, empty">
+                                <span class="rank-number">1ST</span>
+                                <span class="rank-sublabel">Most important</span>
+                                <span class="rank-value" id="rank-value-0">—</span>
+                            </div>
+                            <div class="rank-slot" data-rank="1" role="button" tabindex="0"
+                                aria-label="Second priority, empty">
+                                <span class="rank-number">2ND</span>
+                                <span class="rank-sublabel"></span>
+                                <span class="rank-value" id="rank-value-1">—</span>
+                            </div>
+                            <div class="rank-slot" data-rank="2" role="button" tabindex="0"
+                                aria-label="Third priority, empty">
+                                <span class="rank-number">3RD</span>
+                                <span class="rank-sublabel">Least important</span>
+                                <span class="rank-value" id="rank-value-2">—</span>
+                            </div>
+                        </div>
+
+                        <div class="rank-options" id="rank-options">
+                            <!-- Populated by JS with the 3 selected principles -->
+                        </div>
                     </div>
 
-                    <p class="prompt final-prompt">Would these principles have changed how 23andMe handled its data?</p>
+                    <!-- NEW: Polished constitution card -->
+                    <div id="constitution-card" class="constitution-card hidden">
+                        <div class="constitution-header">
+                            <span class="constitution-kicker">PERSONALIZED</span>
+                            <h3>OUR DATA SCIENCE CONSTITUTION</h3>
+                        </div>
+                        <div class="constitution-articles" id="constitution-articles">
+                            <!-- Generated by JS -->
+                        </div>
+                        <div class="constitution-footer">
+                            <p>Drafted during the 23andMe Crisis Desk Simulation</p>
+                            <p class="constitution-date" id="constitution-date"></p>
+                        </div>
+                    </div>
 
-                    <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
+                    <div id="sacrifice-prompt" class="discussion-connection hidden">
+                        <p class="connection-label">💬 THINK ABOUT IT</p>
+                        <p>Why did you sacrifice the other principles? Would these three have changed
+                            how 23andMe handled its data?</p>
+                    </div>
+
+                    <button id="stage8-continue" class="secondary-btn hidden" data-next
+                        style="margin-top: 2rem;">CONTINUE</button>
                 </div>
             </section>
 
+            <!-- ===== STAGE 9: Final Reflection & Synthesis ===== -->
             <section class="screen" data-stage="9" id="stage-9">
                 <div class="panel final-panel">
                     <p class="eyebrow">STAGE 09</p>
-                    <h2>SO... WHAT DO WE ACTUALLY OWE PEOPLE WHEN WE COLLECT THEIR DATA?</h2>
+                    <h2>FINAL REFLECTION</h2>
 
-                    <div class="final-questions">
-                        <p>Is selling genetic, survey, or financial data problematic?</p>
-                        <p>Did users truly understand what they agreed to?</p>
-                        <p>Should a buyer have to follow the original privacy agreement?</p>
-                        <p>What agreements should researchers make with participants?</p>
-                        <p>What principles should data scientists never lose sight of?</p>
+                    <!-- Decisions recap -->
+                    <div class="decisions-recap" id="decisions-recap">
+                        <!-- Generated dynamically by JS -->
                     </div>
 
-                    <button id="restart-btn" class="primary-btn">RESTART SIMULATION</button>
+                    <!-- "Would you still choose this?" reflections -->
+                    <div class="reflection-section">
+                        <h3>WOULD YOU STILL CHOOSE THIS?</h3>
+
+                        <div class="reflection-question">
+                            <p class="prompt secondary">Would you still make the same decisions if the data
+                                were <em>yours</em>?</p>
+                            <div class="choice-row triple">
+                                <button class="choice-btn" data-reflection-cat="own" data-reflection-ans="yes">YES</button>
+                                <button class="choice-btn" data-reflection-cat="own" data-reflection-ans="no">NO</button>
+                                <button class="choice-btn" data-reflection-cat="own" data-reflection-ans="unsure">UNSURE</button>
+                            </div>
+                            <textarea class="reflection-textarea" id="reflection-own"
+                                placeholder="Why or why not?" rows="2" aria-label="Explain your reasoning"></textarea>
+                        </div>
+
+                        <div class="reflection-question">
+                            <p class="prompt secondary">Would you make the same decision if the data belonged
+                                to <em>your family</em>?</p>
+                            <div class="choice-row triple">
+                                <button class="choice-btn" data-reflection-cat="family" data-reflection-ans="yes">YES</button>
+                                <button class="choice-btn" data-reflection-cat="family" data-reflection-ans="no">NO</button>
+                                <button class="choice-btn" data-reflection-cat="family" data-reflection-ans="unsure">UNSURE</button>
+                            </div>
+                            <textarea class="reflection-textarea" id="reflection-family"
+                                placeholder="What changes?" rows="2" aria-label="Explain what changes"></textarea>
+                        </div>
+
+                        <div class="reflection-question">
+                            <p class="prompt secondary">Would you make the same decision if your decision were
+                                <em>publicly reported tomorrow</em>?</p>
+                            <div class="choice-row triple">
+                                <button class="choice-btn" data-reflection-cat="public" data-reflection-ans="yes">YES</button>
+                                <button class="choice-btn" data-reflection-cat="public" data-reflection-ans="no">NO</button>
+                                <button class="choice-btn" data-reflection-cat="public" data-reflection-ans="unsure">UNSURE</button>
+                            </div>
+                            <textarea class="reflection-textarea" id="reflection-public"
+                                placeholder="Does public scrutiny change your reasoning?" rows="2"
+                                aria-label="Does public scrutiny change your reasoning"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Synthesis of all 5 discussion questions -->
+                    <div class="synthesis-section">
+                        <h3>WHAT THIS SIMULATION ASKED YOU TO CONSIDER</h3>
+                        <div class="synthesis-list">
+                            <div class="synthesis-item">
+                                <span class="synthesis-number">1</span>
+                                <p>What makes sensitive data different?</p>
+                            </div>
+                            <div class="synthesis-item">
+                                <span class="synthesis-number">2</span>
+                                <p>What does meaningful consent require?</p>
+                            </div>
+                            <div class="synthesis-item">
+                                <span class="synthesis-number">3</span>
+                                <p>What obligations survive a change in ownership?</p>
+                            </div>
+                            <div class="synthesis-item">
+                                <span class="synthesis-number">4</span>
+                                <p>What promises should researchers make?</p>
+                            </div>
+                            <div class="synthesis-item">
+                                <span class="synthesis-number">5</span>
+                                <p>What principles should data scientists refuse to compromise?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final discussion -->
+                    <div class="final-discussion">
+                        <h3>FINAL DISCUSSION</h3>
+                        <p class="prompt">What do we owe people when we collect their data?</p>
+                        <textarea class="final-textarea" id="final-response"
+                            placeholder="Your response…" rows="4"
+                            aria-label="Final discussion response"></textarea>
+                    </div>
+
+                    <button id="restart-btn" class="primary-btn" style="margin-top: 2rem;">RESTART SIMULATION</button>
                 </div>
             </section>
+
         </main>
     </div>
 

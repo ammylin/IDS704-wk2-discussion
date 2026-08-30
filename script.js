@@ -289,7 +289,7 @@ function restartSimulation() {
 function syncStageSpecificUI() {
     syncSelectionStates();
 
-    if (state.currentStage === 3) {
+    if (state.currentStage === 2) {
         // Reset consent state when entering stage 3 to show fresh timer
         state.consentChoice = null;
         consentRevealEl.classList.add("hidden");
@@ -298,23 +298,23 @@ function syncStageSpecificUI() {
         clearConsentTimer();
     }
 
-    if (state.currentStage === 4 && state.bankruptcyChoice) {
+    if (state.currentStage === 3 && state.bankruptcyChoice) {
         setBankruptcyChoice(state.bankruptcyChoice);
-    } else if (state.currentStage !== 4) {
+    } else if (state.currentStage !== 3) {
         bankruptcySummaryEl.classList.add("hidden");
     }
 
-    if (state.currentStage === 5) {
+    if (state.currentStage === 4) {
         updateTwistDisplay();
     }
 
-    if (state.currentStage === 6 && state.ownerChoice) {
+    if (state.currentStage === 5 && state.ownerChoice) {
         setOwnerChoice(state.ownerChoice);
-    } else if (state.currentStage !== 6) {
+    } else if (state.currentStage !== 5) {
         ownerSummaryEl.classList.add("hidden");
     }
 
-    if (state.currentStage === 8) {
+    if (state.currentStage === 7) {
         renderConstitution();
     }
 }
@@ -432,7 +432,7 @@ document.addEventListener("keydown", (event) => {
     if (["1", "2", "3", "4", "5"].includes(event.key)) {
         const key = Number(event.key);
 
-        if (state.currentStage === 3) {
+        if (state.currentStage === 2) {
             const consentButtons = [...document.querySelectorAll("[data-consent]")];
             if (key <= consentButtons.length) {
                 consentButtons[key - 1].click();
@@ -440,7 +440,7 @@ document.addEventListener("keydown", (event) => {
             return;
         }
 
-        if (state.currentStage === 4) {
+        if (state.currentStage === 3) {
             const bankruptcyButtons = [...document.querySelectorAll("[data-bankruptcy-choice]")];
             if (key <= bankruptcyButtons.length) {
                 bankruptcyButtons[key - 1].click();
@@ -448,7 +448,7 @@ document.addEventListener("keydown", (event) => {
             return;
         }
 
-        if (state.currentStage === 5) {
+        if (state.currentStage === 4) {
             const twistButtons = [...document.querySelectorAll("[data-twist-answer]")];
             if (key <= twistButtons.length) {
                 twistButtons[key - 1].click();
@@ -456,7 +456,7 @@ document.addEventListener("keydown", (event) => {
             return;
         }
 
-        if (state.currentStage === 6) {
+        if (state.currentStage === 5) {
             const ownerButtons = [...document.querySelectorAll(".owner-btn")];
             if (key <= ownerButtons.length) {
                 ownerButtons[key - 1].click();

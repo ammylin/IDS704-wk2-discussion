@@ -450,8 +450,8 @@ h2 {
     width: min(920px, 100%);
     border-radius: 20px;
     padding: 24px 18px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(19, 28, 42, 0.9);
+    border: 1px solid rgba(86, 111, 164, 0.14);
+    background: rgba(248, 250, 255, 0.95);
     text-align: center;
 }
 

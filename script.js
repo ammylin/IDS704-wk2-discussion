@@ -45,8 +45,6 @@ const twistDeck = [
 const stageNumberEl = document.getElementById("stage-number");
 const stageTotalEl = document.getElementById("stage-total");
 const progressFillEl = document.getElementById("progress-fill");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
 const screens = [...document.querySelectorAll(".screen")];
 const countdownValueEl = document.getElementById("countdown-value");
 const consentRevealEl = document.getElementById("consent-reveal");
@@ -69,9 +67,6 @@ function updateProgress() {
     stageNumberEl.textContent = String(state.currentStage + 1).padStart(2, "0");
     stageTotalEl.textContent = String(totalStages).padStart(2, "0");
     progressFillEl.style.width = `${progress}%`;
-
-    prevBtn.disabled = state.currentStage === 0;
-    nextBtn.textContent = state.currentStage === totalStages - 1 ? "FINISH" : "NEXT";
 }
 
 function showScreen(index) {
@@ -177,6 +172,20 @@ function updateTwistDisplay() {
     } else {
         twistSummaryEl.classList.add("hidden");
     }
+
+    // Show CONTINUE button only after last twist is answered
+    const isLastTwist = state.twistIndex === twistDeck.length - 1;
+    const hasAnsweredLastTwist = state.twistAnswers[state.twistIndex];
+    const revealBtn = document.getElementById("reveal-next-twist");
+    const continueBtn = document.getElementById("continue-after-twists");
+
+    if (isLastTwist && hasAnsweredLastTwist) {
+        revealBtn.classList.add("hidden");
+        continueBtn.classList.remove("hidden");
+    } else {
+        revealBtn.classList.remove("hidden");
+        continueBtn.classList.add("hidden");
+    }
 }
 
 function revealNextTwist() {
@@ -281,7 +290,9 @@ function syncStageSpecificUI() {
     syncSelectionStates();
 
     if (state.currentStage === 3) {
-        consentRevealEl.classList.toggle("hidden", !state.consentChoice);
+        // Reset consent state when entering stage 3 to show fresh timer
+        state.consentChoice = null;
+        consentRevealEl.classList.add("hidden");
         startConsentTimer();
     } else {
         clearConsentTimer();
@@ -362,6 +373,7 @@ document.addEventListener("click", (event) => {
         const label = answer.toUpperCase();
         twistSummaryEl.textContent = `Twist ${state.twistIndex + 1}: ${label}`;
         twistSummaryEl.classList.remove("hidden");
+        updateTwistDisplay();
         syncSelectionStates();
         return;
     }

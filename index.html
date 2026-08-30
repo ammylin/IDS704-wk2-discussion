@@ -35,8 +35,8 @@
                     <p class="eyebrow">CLASSROOM CRISIS SIMULATION</p>
                     <h1>YOU ARE THE 23andMe DATA SCIENCE TEAM</h1>
                     <p class="lead">
-                        Your company is in financial trouble. Your database is worth millions.
-                        What do you do with it?
+                        Your company is in financial trouble. As part of the data science leadership team,
+                        you must decide what to do with the genetic database—and live with the consequences.
                     </p>
                     <button class="primary-btn" data-next>START SIMULATION</button>
                 </div>
@@ -115,7 +115,7 @@
                         <div class="timer-pill"><span id="countdown-value">30</span>s</div>
                     </div>
 
-                    <p class="prompt">Would you give us your DNA?</p>
+                    <p class="prompt">Do you accept the terms and conditions?</p>
                     <div class="choice-row double">
                         <button class="choice-btn" data-consent="agree">AGREE</button>
                         <button class="choice-btn" data-consent="decline">DO NOT AGREE</button>
@@ -138,6 +138,7 @@
                             <button class="choice-btn" data-consent-understanding="no">NO</button>
                             <button class="choice-btn" data-consent-understanding="depends">IT DEPENDS</button>
                         </div>
+                        <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
                     </div>
                 </div>
             </section>
@@ -158,6 +159,7 @@
                     </div>
 
                     <div id="bankruptcy-summary" class="selection-box hidden"></div>
+                    <button class="secondary-btn" data-next style="margin-top: 2rem;">CONTINUE</button>
                 </div>
             </section>
 
@@ -180,6 +182,7 @@
 
                     <div class="twist-controls">
                         <button id="reveal-next-twist" class="secondary-btn">REVEAL NEXT TWIST</button>
+                        <button id="continue-after-twists" class="secondary-btn hidden" data-next>CONTINUE</button>
                     </div>
 
                     <div id="twist-summary" class="selection-box hidden"></div>
@@ -283,12 +286,6 @@
                 </div>
             </section>
         </main>
-
-        <footer class="control-bar">
-            <button id="prev-btn" class="nav-btn">PREVIOUS</button>
-            <div class="nav-spacer"></div>
-            <button id="next-btn" class="nav-btn primary-nav">NEXT</button>
-        </footer>
     </div>
 
     <script src="script.js"></script>

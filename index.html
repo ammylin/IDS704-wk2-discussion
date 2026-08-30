@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>You Are the 23andMe Data Science Team</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="dna-bg" aria-hidden="true"></div>
+
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand-block">
+                <span class="brand-kicker">ETHICS SIMULATION</span>
+                <h2>23andMe Crisis Desk</h2>
+            </div>
+
+            <div class="progress-panel">
+                <div class="progress-meta">
+                    <span>STAGE</span>
+                    <strong><span id="stage-number">01</span>/<span id="stage-total">09</span></strong>
+                </div>
+                <div class="progress-track" aria-label="Simulation progress">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="stage-stack">
+            <section class="screen active" data-stage="1" id="stage-1">
+                <div class="panel intro-panel">
+                    <p class="eyebrow">CLASSROOM CRISIS SIMULATION</p>
+                    <h1>YOU ARE THE 23andMe DATA SCIENCE TEAM</h1>
+                    <p class="lead">
+                        Your company is in financial trouble. Your database is worth millions.
+                        What do you do with it?
+                    </p>
+                    <button class="primary-btn" data-next>START SIMULATION</button>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="2" id="stage-2">
+                <div class="panel">
+                    <p class="eyebrow">STAGE 02</p>
+                    <h2>WHAT DATA WOULD YOU SELL?</h2>
+                    <div class="data-grid" id="data-grid">
+                        <button class="data-card" data-data-type="Genetic / DNA">
+                            <span class="icon">🧬</span>
+                            <span>Genetic / DNA</span>
+                        </button>
+                        <button class="data-card" data-data-type="Health information">
+                            <span class="icon">❤️</span>
+                            <span>Health information</span>
+                        </button>
+                        <button class="data-card" data-data-type="Location">
+                            <span class="icon">📍</span>
+                            <span>Location</span>
+                        </button>
+                        <button class="data-card" data-data-type="Financial / purchasing information">
+                            <span class="icon">💳</span>
+                            <span>Financial / purchasing information</span>
+                        </button>
+                        <button class="data-card" data-data-type="Survey responses">
+                            <span class="icon">📋</span>
+                            <span>Survey responses</span>
+                        </button>
+                        <button class="data-card" data-data-type="Family relationships">
+                            <span class="icon">👨‍👩‍👧</span>
+                            <span>Family relationships</span>
+                        </button>
+                        <button class="data-card" data-data-type="Voice data">
+                            <span class="icon">🎤</span>
+                            <span>Voice data</span>
+                        </button>
+                        <button class="data-card" data-data-type="Facial / biometric data">
+                            <span class="icon">👁️</span>
+                            <span>Facial / biometric data</span>
+                        </button>
+                    </div>
+
+                    <p class="prompt">Which types of data would you be comfortable selling to another company?</p>
+                    <button class="secondary-btn" data-next>CONTINUE</button>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="3" id="stage-3">
+                <div class="panel policy-panel-wrap">
+                    <p class="eyebrow">STAGE 03</p>
+                    <h2>WOULD YOU ACTUALLY READ THE PRIVACY POLICY?</h2>
+
+                    <div class="policy-box">
+                        <div class="policy-scroll">
+                            <p><strong>Privacy Policy</strong></p>
+                            <p>By using our services, you agree that your personal, behavioral, and genomic information
+                                may be used for internal research, product development, and algorithm testing.</p>
+                            <p>We may share data with research partners, business partners, and affiliated entities for
+                                data analysis, model training, and scientific collaboration.</p>
+                            <p>Information may be retained for as long as necessary to operate the services, comply with
+                                legal obligations, or support ongoing research initiatives.</p>
+                            <p>In the event of a corporate transaction, merger, bankruptcy, or similar event, user data
+                                may be transferred to a successor organization, including data that is not separately
+                                identifiable.</p>
+                            <p>We may combine information from your account, surveys, health questionnaires, location
+                                signals, and third-party sources to improve products and research outcomes.</p>
+                            <p>Deletion requests may be limited by legal requirements, research constraints, or the
+                                operational complexity of removing data from aggregated or derived systems.</p>
+                        </div>
+                    </div>
+
+                    <div class="timer-row">
+                        <span class="timer-label">Consent timer</span>
+                        <div class="timer-pill"><span id="countdown-value">30</span>s</div>
+                    </div>
+
+                    <p class="prompt">Would you give us your DNA?</p>
+                    <div class="choice-row double">
+                        <button class="choice-btn" data-consent="agree">AGREE</button>
+                        <button class="choice-btn" data-consent="decline">DO NOT AGREE</button>
+                    </div>
+
+                    <div id="consent-reveal" class="reveal-panel hidden">
+                        <h3>WAIT. WHAT DID YOU JUST AGREE TO?</h3>
+                        <div class="clause-list">
+                            <div class="clause-item">Research use</div>
+                            <div class="clause-item">Sharing with research/business partners</div>
+                            <div class="clause-item">Data retention</div>
+                            <div class="clause-item">Possible transfer during corporate transactions</div>
+                            <div class="clause-item">Combining information</div>
+                            <div class="clause-item">Deletion limitations</div>
+                        </div>
+
+                        <p class="prompt secondary">Is signing an agreement the same as informed consent?</p>
+                        <div class="choice-row triple">
+                            <button class="choice-btn" data-consent-understanding="yes">YES</button>
+                            <button class="choice-btn" data-consent-understanding="no">NO</button>
+                            <button class="choice-btn" data-consent-understanding="depends">IT DEPENDS</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="4" id="stage-4">
+                <div class="panel danger-panel">
+                    <p class="eyebrow red">BREAKING NEWS</p>
+                    <h2>23andMe is going bankrupt.</h2>
+                    <p class="headline">A pharmaceutical company offers $50,000,000 for access to the company's genetic
+                        database.</p>
+                    <p class="prompt">WHAT DO YOU DO?</p>
+
+                    <div class="choice-row triple">
+                        <button class="choice-btn crisis" data-bankruptcy-choice="sell">1. SELL</button>
+                        <button class="choice-btn crisis" data-bankruptcy-choice="sell-conditions">2. SELL WITH
+                            CONDITIONS</button>
+                        <button class="choice-btn crisis" data-bankruptcy-choice="refuse">3. REFUSE</button>
+                    </div>
+
+                    <div id="bankruptcy-summary" class="selection-box hidden"></div>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="5" id="stage-5">
+                <div class="panel">
+                    <p class="eyebrow">STAGE 05</p>
+                    <h2>THE TWISTS</h2>
+
+                    <div id="twist-card" class="twist-card">
+                        <p class="twist-index" id="twist-index-text">TWIST 01</p>
+                        <h3 id="twist-title">The buyer promises to follow the existing privacy agreement.</h3>
+                        <p class="prompt" id="twist-question">Does this change your decision?</p>
+                    </div>
+
+                    <div class="choice-row triple twist-choice-row">
+                        <button class="choice-btn" data-twist-answer="yes">YES</button>
+                        <button class="choice-btn" data-twist-answer="no">NO</button>
+                        <button class="choice-btn" data-twist-answer="maybe">MAYBE</button>
+                    </div>
+
+                    <div class="twist-controls">
+                        <button id="reveal-next-twist" class="secondary-btn">REVEAL NEXT TWIST</button>
+                    </div>
+
+                    <div id="twist-summary" class="selection-box hidden"></div>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="6" id="stage-6">
+                <div class="panel">
+                    <p class="eyebrow">STAGE 06</p>
+                    <h2>WHO SHOULD CONTROL THE DATA?</h2>
+
+                    <div class="owner-grid">
+                        <button class="owner-btn" data-owner="The user">THE USER</button>
+                        <button class="owner-btn" data-owner="23andMe">23andMe</button>
+                        <button class="owner-btn" data-owner="The buyer">THE BUYER</button>
+                        <button class="owner-btn" data-owner="Government / society">GOVERNMENT / SOCIETY</button>
+                        <button class="owner-btn" data-owner="No one">NO ONE</button>
+                    </div>
+
+                    <div id="owner-summary" class="selection-box hidden"></div>
+
+                    <div class="prompt-list">
+                        <p>Does your answer change if the data is genetic?</p>
+                        <p>Does your answer change if the data belongs partly to your relatives?</p>
+                        <p>Does your answer change if selling the data prevents the company from collapsing?</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="7" id="stage-7">
+                <div class="panel">
+                    <p class="eyebrow">STAGE 07</p>
+                    <h2>NOW IT'S YOUR DATA.</h2>
+                    <p class="lead small">Imagine you are collecting data for your own research project.</p>
+
+                    <div class="data-grid mini-grid">
+                        <div class="mini-card"><span>Face recognition</span></div>
+                        <div class="mini-card"><span>Emotion recognition</span></div>
+                        <div class="mini-card"><span>Health prediction</span></div>
+                        <div class="mini-card"><span>Location</span></div>
+                        <div class="mini-card"><span>Voice</span></div>
+                        <div class="mini-card"><span>Behavioral data</span></div>
+                        <div class="mini-card"><span>Biometric data</span></div>
+                        <div class="mini-card"><span>Survey data</span></div>
+                    </div>
+
+                    <div class="discussion-blocks">
+                        <div>
+                            <p class="prompt">What is the WORST thing someone could do with the data you collect?</p>
+                        </div>
+                        <div>
+                            <p class="prompt">What would you promise your participants before collecting it?</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="8" id="stage-8">
+                <div class="panel">
+                    <p class="eyebrow">STAGE 08</p>
+                    <h2>YOU GET TO WRITE THE RULES.</h2>
+
+                    <div class="principles-grid" id="principles-grid">
+                        <button class="principle-card" data-principle="CONSENT">CONSENT</button>
+                        <button class="principle-card" data-principle="TRANSPARENCY">TRANSPARENCY</button>
+                        <button class="principle-card" data-principle="CONTROL">CONTROL</button>
+                        <button class="principle-card" data-principle="SECURITY">SECURITY</button>
+                        <button class="principle-card" data-principle="PURPOSE LIMITATION">PURPOSE LIMITATION</button>
+                        <button class="principle-card" data-principle="ACCOUNTABILITY">ACCOUNTABILITY</button>
+                        <button class="principle-card" data-principle="DATA MINIMIZATION">DATA MINIMIZATION</button>
+                        <button class="principle-card" data-principle="HUMAN DIGNITY">HUMAN DIGNITY</button>
+                    </div>
+
+                    <p class="prompt">You can only choose THREE principles that your data science team can NEVER
+                        compromise.</p>
+                    <p id="principle-limit-note" class="limit-note">Choose up to three.</p>
+
+                    <div id="constitution-panel" class="constitution-panel hidden">
+                        <h3>OUR DATA SCIENCE CONSTITUTION</h3>
+                        <div id="constitution-list" class="constitution-list"></div>
+                    </div>
+
+                    <p class="prompt final-prompt">Would these principles have changed how 23andMe handled its data?</p>
+                </div>
+            </section>
+
+            <section class="screen" data-stage="9" id="stage-9">
+                <div class="panel final-panel">
+                    <p class="eyebrow">STAGE 09</p>
+                    <h2>SO... WHAT DO WE ACTUALLY OWE PEOPLE WHEN WE COLLECT THEIR DATA?</h2>
+
+                    <div class="final-questions">
+                        <p>Is selling genetic, survey, or financial data problematic?</p>
+                        <p>Did users truly understand what they agreed to?</p>
+                        <p>Should a buyer have to follow the original privacy agreement?</p>
+                        <p>What agreements should researchers make with participants?</p>
+                        <p>What principles should data scientists never lose sight of?</p>
+                    </div>
+
+                    <button id="restart-btn" class="primary-btn">RESTART SIMULATION</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="control-bar">
+            <button id="prev-btn" class="nav-btn">PREVIOUS</button>
+            <div class="nav-spacer"></div>
+            <button id="next-btn" class="nav-btn primary-nav">NEXT</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

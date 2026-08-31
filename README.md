@@ -1,64 +1,48 @@
-# 23andMe Crisis Desk — Ethics Simulation
+# 23andMe Data Crisis — Choose-Your-Own-Adventure Ethics Simulation
 
-An interactive, browser-based ethics simulation for **IDS 704: Ethics in Data Science** (Week 2 Discussion). Players step into the role of the 23andMe data science leadership team and navigate a series of ethical dilemmas around genetic data privacy, informed consent, data ownership, and corporate responsibility.
+An interactive, browser-based ethics simulation for **IDS 704: Ethics in Data Science** (Week 2 Discussion). Players select one of four distinct stakeholder roles to experience the ethical dilemmas around genetic data privacy, corporate bankruptcy, informed consent, and individual responsibility.
 
-> **Reality check:** This simulation is inspired by real events involving 23andMe, but some scenarios, offers, decisions, and consequences are hypothetical and designed for ethical analysis.
+> **Reality check:** This simulation is inspired by real events involving 23andMe, but scenarios, offers, decisions, and dilemmas are hypothetical and designed for classroom ethical analysis.
 
-## Overview
+## Choose Your Character
 
-The simulation presents a 9-stage decision-making experience built around the real-world scenario of 23andMe's financial crisis and the fate of its genetic database. Each stage maps to one or more of the five core discussion questions below, giving students a structured path through competing ethical values before an open discussion.
+On the opening screen, students select one of four roles:
 
-### Five Discussion Questions
+| Character | Perspective & Dilemma |
+|---|---|
+| 🛒 **The Consumer** | Trusted 23andMe with their DNA years ago. Faces the terms & conditions fine-print reality, chooses comfort levels with data sharing, and confronts what happens to their genome during bankruptcy. |
+| 💼 **The Executive** | CEO running out of cash with 400 employees and creditors at the door. Decides whether to accept an unrestricted $50M buyout from Big Pharma, sell with conditions, or liquidate and destroy the data. |
+| 🏢 **The Buyer** | VP of M&A at a pharmaceutical company. Balances the opportunity to accelerate drug discovery using 15M patient profiles against the ethical and regulatory obligations inherited from the original company. |
+| 🔬 **The Data Scientist** | Senior data scientist with **$87,000 in student loan debt** who discovers soft-deleted user records in the sale pipeline. Faces the whistleblower dilemma: speak up and risk career ruin/debt default, or stay quiet and survive. |
 
-1. Is there anything problematic about 23andMe selling users' genetic, survey, or financial data? If so, what would make it less problematic?
-2. To what degree did 23andMe users understand the privacy policy they signed?
-3. If you buy data from another company, should you have to follow the same privacy agreement as the original company?
-4. If we collect sensitive data for our own research/projects, what agreements should we make with participants when collecting or aggregating that data?
-5. If we were on the 23andMe data science team before bankruptcy, what principles, priorities, or values should we refuse to lose sight of?
+---
 
-### Stages
+## Simulation Stages
 
-| Stage | Title | Discussion Q | Description |
-|-------|-------|:------------:|-------------|
-| 01 | **Introduction** | — | Framing — you are the 23andMe data science team |
-| 02 | **What Data Would You Sell?** | Q1 | Select which categories of user data you'd be comfortable selling, then reflect on what makes one category more or less acceptable than another |
-| 03 | **Privacy Policy & Consent** | Q2 | Read a mock privacy policy under a 30-second timer, respond to a consent prompt, rate your confidence that an average user understood what they agreed to, and reflect on what meaningful informed consent requires |
-| 04 | **Bankruptcy Crisis** | Q1, Q3 | 23andMe goes bankrupt — a pharma company offers $50 M for the genetic database. Choose to sell, sell with conditions, or refuse, and see how your choice trades off across financial sustainability, user trust, privacy, and public benefit |
-| 05 | **The Twists + Ethical Obligations** | Q3 | Five escalating twists challenge your earlier decision, then you consider whether a data buyer inherits the original company's ethical obligations |
-| 06 | **Data Ownership** | Q1, Q3 | Vote on who should control the data — users, the company, the buyer, government, or no one |
-| 07 | **Your Own Research** | Q4 | Practical exercise: if someone offered $1 M for your research dataset, what promises would you want to have already made to participants? Select from nine commitments |
-| 08 | **Data Science Constitution** | Q5 | Choose three non-negotiable principles, rank them by priority, and generate a personalized, screenshot-worthy Data Science Constitution |
-| 09 | **Final Reflection** | All | Review a recap of your decisions, answer three perspective-shift questions ("Would you still choose this?"), see a synthesis of all five discussion questions, and write a final response |
+| Stage | Title | Description |
+|---|---|---|
+| 01 | **Character Selection** | Choose one of the 4 roles. |
+| 02 | **Role Context & Briefing** | Immersive briefing for your character. *The Consumer* gets the interactive 30-second Terms of Service consent challenge; other roles review stakeholder stats and context. |
+| 03 | **Data Interactions** | Role-specific prompt selecting which data categories to share, monetize, acquire, or audit. |
+| 04 | **The Core Dilemma** | Major decision point tailored to your role with dynamic tradeoff analysis across competing ethical dimensions. |
+| 05 | **The Twists** | 3 escalating complications and moral pressure points specific to your role. |
+| 06 | **Data Ownership** | The universal question: *Who should control genetic and health data?* |
+| 07 | **Final Reflection & Role Comparison** | Personal path recap + preview of the dilemmas other roles faced to prime in-person classroom discussion. |
 
-## Key Features
-
-- **Tradeoff visualization** — Stage 4 shows how each bankruptcy decision affects financial sustainability, user trust, privacy protection, and research/public benefit using color-coded indicators
-- **Confidence rating** — Stage 3 adds a 5-point scale to measure how well students think users understood the privacy policy
-- **Discussion connections** — Compact, visually distinct prompts at the end of key stages link the activity to the five discussion questions
-- **Interactive commitments** — Stage 7 lets students select from nine research commitments and see a reflection on the importance of making promises *before* collecting data
-- **Ranked constitution** — Stage 8 has students select three principles, rank them, and generates a formal constitution card with articles and descriptions
-- **Personal reflections** — Stage 9 asks three perspective-shift questions (your data, your family's data, public scrutiny) with optional text responses
-- **Decisions recap** — Stage 9 displays a summary of every major choice the student made throughout the simulation
-- **Reality disclaimer** — A subtle note on the intro stage clarifies that some scenarios are hypothetical
+---
 
 ## Getting Started
 
-No build tools or dependencies are required — the simulation is a self-contained static site.
+No build tools or dependencies are required — the simulation is a self-contained static web application.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/<your-username>/IDS704-wk2-discussion.git
-   cd IDS704-wk2-discussion
-   ```
-
-2. **Open in a browser**
+1. **Open in a browser**
    ```bash
    open index.html        # macOS
    xdg-open index.html    # Linux
    start index.html       # Windows
    ```
 
-   Or serve locally with any static server:
+2. Or serve locally:
    ```bash
    python3 -m http.server 8000
    ```
@@ -66,42 +50,11 @@ No build tools or dependencies are required — the simulation is a self-contain
 ## Keyboard Shortcuts
 
 | Key | Action |
-|-----|--------|
-| `→` / `Space` | Advance to the next stage |
-| `←` | Go back to the previous stage |
-| `R` | Restart the simulation |
-| `1`–`5` | Quick-select numbered choices on applicable stages |
-
-> Keyboard shortcuts are disabled while typing in a text area.
-
-## Project Structure
-
-```
-IDS704-wk2-discussion/
-├── index.html   # Page structure and all 9 simulation stages
-├── script.js    # State management, navigation, tradeoffs, ranking, and interaction logic
-├── style.css    # Responsive styling with glassmorphism / DNA-helix theme
-└── README.md
-```
-
-## Customization
-
-- **Edit stage content** — Update the HTML in `index.html`. Each stage lives in its own `<section class="screen" data-stage="N">` block.
-- **Change twist prompts** — Modify the `twistDeck` array at the top of `script.js`.
-- **Change tradeoff profiles** — Edit the `tradeoffProfiles` object in `script.js` to adjust how each bankruptcy decision is scored.
-- **Change constitution principles** — Update the principle cards in `index.html` (Stage 8) and the `principleDescriptions` object in `script.js`.
-- **Adjust the consent timer** — Change `consentTimerSeconds` in the state object inside `script.js` (default: 30 seconds).
-- **Restyle** — CSS custom properties in `:root` at the top of `style.css` control the color palette.
-
-## Accessibility
-
-- All toggle buttons use `aria-pressed` to communicate state to screen readers
-- Multi-select items display a `✓` checkmark so selection is not communicated by color alone
-- Focus is visible on all interactive elements via `focus-visible` outlines
-- Text areas have `aria-label` attributes
-- The timer uses both color and a numeric countdown
-- Layouts reflow to single-column on mobile
+|---|---|
+| `→` / `Space` | Advance to next stage |
+| `←` | Previous stage |
+| `R` | Restart / choose new character |
 
 ## License
 
-This project was created for educational use in IDS 704 at Duke University.
+Created for educational use in IDS 704: Ethics in Data Science at Duke University.

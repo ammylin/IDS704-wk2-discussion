@@ -1,10 +1,10 @@
-/* ── Variables ─────────────────────────────────────────────────────────────── */
+/* ── Variables & Palette ─────────────────────────────────────────────────── */
 
 :root {
     --bg: #eef4ff;
     --bg-soft: #f4f8ff;
-    --panel: rgba(255, 255, 255, 0.82);
-    --panel-strong: rgba(248, 251, 255, 0.96);
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-strong: rgba(248, 251, 255, 0.98);
     --line: rgba(86, 111, 164, 0.18);
     --text: #101b2d;
     --muted: #425579;
@@ -30,7 +30,7 @@ body {
     min-height: 100%;
     background: var(--bg);
     color: var(--text);
-    font-family: "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+    font-family: "Segoe UI", Inter, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
 }
 
 body {
@@ -93,11 +93,11 @@ button {
     max-height: 95vh;
     overflow-y: auto;
     padding: 24px 28px 18px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.78);
     border: 1px solid var(--line);
     border-radius: 24px;
     box-shadow: var(--shadow);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
 }
 
 /* ── Top Bar ──────────────────────────────────────────────────────────────── */
@@ -106,13 +106,13 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 20px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--line);
     position: sticky;
     top: 0;
     z-index: 10;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(8px);
     margin: -24px -28px 0;
     padding: 16px 28px;
@@ -122,25 +122,41 @@ button {
 .brand-block {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .brand-kicker {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.25rem;
     text-transform: uppercase;
     color: var(--muted);
+    font-weight: 700;
 }
 
 .brand-block h2 {
     margin: 0;
-    font-size: clamp(1.2rem, 1vw + 0.8rem, 1.7rem);
+    font-size: clamp(1.1rem, 1vw + 0.7rem, 1.5rem);
     text-transform: uppercase;
-    letter-spacing: 0.12rem;
+    letter-spacing: 0.1rem;
+}
+
+.role-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(51, 105, 215, 0.12), rgba(101, 72, 216, 0.15));
+    border: 1px solid rgba(101, 72, 216, 0.3);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--purple);
+    text-transform: uppercase;
 }
 
 .progress-panel {
-    min-width: min(420px, 40vw);
+    min-width: min(340px, 35vw);
 }
 
 .progress-meta {
@@ -150,24 +166,25 @@ button {
     text-transform: uppercase;
     letter-spacing: 0.18rem;
     font-size: 0.72rem;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-weight: 700;
 }
 
 .progress-track {
     width: 100%;
-    height: 12px;
+    height: 10px;
     border-radius: 999px;
-    background: rgba(148, 168, 212, 0.12);
-    border: 1px solid rgba(148, 168, 212, 0.18);
+    background: rgba(148, 168, 212, 0.16);
+    border: 1px solid rgba(148, 168, 212, 0.2);
     overflow: hidden;
 }
 
 .progress-fill {
-    width: 11.11%;
+    width: 14.28%;
     height: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, var(--blue), var(--purple), #c679ff);
-    box-shadow: 0 0 24px rgba(105, 173, 255, 0.5);
+    box-shadow: 0 0 20px rgba(105, 173, 255, 0.5);
     transition: width 0.35s ease;
 }
 
@@ -175,14 +192,14 @@ button {
 
 .stage-stack {
     position: relative;
-    padding-top: 28px;
+    padding-top: 24px;
 }
 
 .screen {
     display: none;
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateY(14px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .screen.active {
@@ -194,15 +211,15 @@ button {
 /* ── Panels ───────────────────────────────────────────────────────────────── */
 
 .panel {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 248, 255, 0.96) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(245, 248, 255, 0.97) 100%);
     border: 1px solid rgba(93, 123, 186, 0.14);
     border-radius: 24px;
-    padding: clamp(1.5rem, 2vw, 2.5rem);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6);
+    padding: clamp(1.4rem, 2vw, 2.4rem);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.7);
 }
 
 .intro-panel {
-    min-height: 580px;
+    min-height: 540px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -213,294 +230,265 @@ button {
 /* ── Typography ───────────────────────────────────────────────────────────── */
 
 .eyebrow {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     color: var(--blue);
     font-size: 0.72rem;
-    letter-spacing: 0.32rem;
+    letter-spacing: 0.3rem;
     text-transform: uppercase;
+    font-weight: 800;
 }
 
 .eyebrow.red {
     color: var(--red);
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1, h2, h3, h4 {
     margin: 0;
-    line-height: 1.08;
-    letter-spacing: -0.04em;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
 }
 
 h1 {
-    font-size: clamp(2.5rem, 4vw, 5.2rem);
+    font-size: clamp(2.2rem, 3.8vw, 4.4rem);
     max-width: 900px;
     text-transform: uppercase;
 }
 
 h2 {
-    font-size: clamp(2rem, 2.4vw, 3.4rem);
-    margin-bottom: 20px;
+    font-size: clamp(1.8rem, 2.2vw, 3rem);
+    margin-bottom: 16px;
     text-transform: uppercase;
 }
 
 .lead {
-    font-size: clamp(1.1rem, 1.5vw, 1.8rem);
+    font-size: clamp(1.05rem, 1.4vw, 1.6rem);
     line-height: 1.5;
     max-width: 820px;
-    margin: 20px auto 28px;
+    margin: 16px auto 24px;
     color: var(--muted);
 }
 
 .lead.small {
     text-align: center;
-    font-size: clamp(1rem, 1.2vw, 1.3rem);
+    font-size: clamp(0.95rem, 1.15vw, 1.25rem);
 }
 
-/* ── Buttons (shared base) ────────────────────────────────────────────────── */
+/* ── Character Selection Cards (Stage 1) ──────────────────────────────────── */
+
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 24px 0 20px;
+}
+
+.character-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(86, 111, 164, 0.18);
+    border-radius: 18px;
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(16, 27, 45, 0.04);
+}
+
+.character-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--purple);
+    box-shadow: 0 12px 32px rgba(101, 72, 216, 0.2);
+}
+
+.character-card.is-selected {
+    border-color: var(--purple);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(243, 239, 255, 0.95) 100%);
+    box-shadow: 0 0 0 2px var(--purple), 0 14px 34px rgba(101, 72, 216, 0.25);
+}
+
+.character-icon {
+    font-size: 2.8rem;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.character-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.character-desc {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+/* ── Context & Briefing Stats (Stage 2) ───────────────────────────────────── */
+
+.context-story-card {
+    max-width: 820px;
+    margin: 16px auto;
+    padding: 20px 24px;
+    border-radius: 18px;
+    background: rgba(248, 250, 255, 0.95);
+    border: 1px solid rgba(86, 111, 164, 0.15);
+    line-height: 1.65;
+    font-size: 1rem;
+    color: var(--text);
+    text-align: left;
+}
+
+.context-story-card p {
+    margin: 0 0 12px;
+}
+
+.context-story-card p:last-child {
+    margin-bottom: 0;
+}
+
+.callout-text {
+    font-weight: 700;
+    color: var(--purple);
+}
+
+.briefing-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    width: 100%;
+    max-width: 820px;
+    margin: 18px auto 22px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(86, 111, 164, 0.16);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-val {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--red);
+    letter-spacing: -0.02em;
+}
+
+.stat-lbl {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+/* ── Shared Buttons ───────────────────────────────────────────────────────── */
 
 .primary-btn,
 .secondary-btn,
-.nav-btn,
 .choice-btn,
 .data-card,
 .owner-btn,
-.principle-card,
-.commitment-btn,
-.obligation-btn,
-.confidence-btn,
-.rank-option-btn {
+.confidence-btn {
     border: 1px solid rgba(72, 98, 159, 0.2);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.88);
     color: var(--text);
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease, opacity 0.22s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     cursor: pointer;
 }
 
 .primary-btn,
-.secondary-btn,
-.nav-btn {
-    padding: 0.95rem 1.5rem;
+.secondary-btn {
+    padding: 0.95rem 1.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.14rem;
-    font-weight: 700;
+    letter-spacing: 0.12rem;
+    font-weight: 800;
 }
 
 .primary-btn {
-    background: linear-gradient(135deg, rgba(51, 105, 215, 0.12), rgba(101, 72, 216, 0.12));
-    box-shadow: 0 0 20px rgba(51, 105, 215, 0.12);
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(51, 105, 215, 0.3);
+    border: none;
 }
 
-.primary-btn:hover,
-.secondary-btn:hover,
-.nav-btn:hover,
-.choice-btn:hover,
-.data-card:hover,
-.owner-btn:hover,
-.principle-card:hover,
-.commitment-btn:hover,
-.obligation-btn:hover,
-.confidence-btn:hover,
-.rank-option-btn:hover {
+.primary-btn:hover {
     transform: translateY(-2px);
-    border-color: rgba(157, 124, 255, 0.45);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 12px 30px rgba(101, 72, 216, 0.4);
 }
 
 .secondary-btn {
-    background: rgba(240, 244, 252, 0.9);
+    background: rgba(240, 244, 252, 0.95);
 }
 
-.nav-btn {
-    min-width: 180px;
+.secondary-btn:hover,
+.choice-btn:hover,
+.data-card:hover,
+.owner-btn:hover,
+.confidence-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(101, 72, 216, 0.5);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
-.primary-nav {
-    background: linear-gradient(135deg, rgba(51, 105, 215, 0.08), rgba(101, 72, 216, 0.1));
+.hidden {
+    display: none !important;
 }
 
-.nav-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* ── Focus visible (accessibility) ────────────────────────────────────────── */
-
-button:focus-visible,
-textarea:focus-visible,
-[role="button"]:focus-visible {
-    outline: 3px solid var(--blue);
-    outline-offset: 2px;
-}
-
-/* ── Control Bar ──────────────────────────────────────────────────────────── */
-
-.control-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding-top: 18px;
-    margin-top: 20px;
-    border-top: 1px solid var(--line);
-}
-
-.nav-spacer {
-    flex: 1;
-}
-
-/* ── Prompts ──────────────────────────────────────────────────────────────── */
-
-.prompt {
-    margin: 24px auto 18px;
-    color: var(--text);
-    font-size: clamp(1.12rem, 1.35vw, 1.7rem);
-    line-height: 1.4;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 700;
-    text-align: center;
-}
-
-.prompt.secondary {
-    font-size: clamp(1rem, 1.1vw, 1.4rem);
-    margin-top: 28px;
-}
-
-/* ── Data Grid (Stage 2) ──────────────────────────────────────────────────── */
-
-.data-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
-    gap: 16px;
-    margin-top: 20px;
-}
-
-.data-card,
-.mini-card,
-.owner-btn,
-.principle-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    min-height: 120px;
-    padding: 1rem;
-    text-align: center;
-    font-size: 0.96rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.data-card .icon {
-    font-size: 1.6rem;
-}
-
-/* ── Selected state (shared) ──────────────────────────────────────────────── */
-
-.data-card.is-selected,
-.owner-btn.is-selected,
-.principle-card.is-selected,
-.choice-btn.is-selected,
-.commitment-btn.is-selected,
-.obligation-btn.is-selected,
-.confidence-btn.is-selected {
-    border-color: rgba(101, 72, 216, 0.7);
-    background: linear-gradient(135deg, rgba(51, 105, 215, 0.10), rgba(101, 72, 216, 0.1));
-    box-shadow: 0 0 20px rgba(101, 72, 216, 0.14);
-}
-
-/* Checkmark indicator for multi-select toggles */
-.data-card.is-selected::after,
-.commitment-btn.is-selected::after,
-.obligation-btn.is-selected::after {
-    content: "✓";
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: var(--purple);
-    line-height: 1;
-}
-
-/* ── Choice Row ───────────────────────────────────────────────────────────── */
-
-.choice-row {
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.choice-btn {
-    min-width: 220px;
-    padding: 1rem 1.4rem;
-    font-weight: 800;
-    letter-spacing: 0.14rem;
-    text-transform: uppercase;
-}
-
-.choice-btn.crisis {
-    min-width: 240px;
-    min-height: 72px;
-    font-size: 1.2rem;
-}
-
-.choice-row.double .choice-btn {
-    min-width: 260px;
-}
-
-.choice-row.triple .choice-btn {
-    min-width: 180px;
-}
-
-/* ── Privacy Policy (Stage 3) ─────────────────────────────────────────────── */
+/* ── Privacy Policy & Consent (Stage 2 Consumer) ─────────────────────────── */
 
 .policy-panel-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 .policy-box {
-    width: min(950px, 100%);
+    width: min(900px, 100%);
     border-radius: 18px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
-    background: rgba(248, 250, 255, 0.9);
+    border: 1px solid rgba(86, 111, 164, 0.16);
+    background: rgba(248, 250, 255, 0.95);
     padding: 14px 18px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
+    text-align: left;
 }
 
 .policy-scroll {
-    max-height: 290px;
+    max-height: 240px;
     overflow-y: auto;
     padding-right: 10px;
     color: var(--muted);
-    line-height: 1.75;
-    font-size: 0.95rem;
+    line-height: 1.7;
+    font-size: 0.92rem;
 }
 
 .policy-scroll p {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
 }
-
-/* ── Timer ────────────────────────────────────────────────────────────────── */
 
 .timer-row {
     display: inline-flex;
     align-items: center;
-    gap: 16px;
-    margin: 10px auto 18px;
-    padding: 0.7rem 1rem;
+    gap: 14px;
+    margin: 8px auto 16px;
+    padding: 0.6rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 190, 101, 0.28);
-    background: rgba(255, 190, 101, 0.06);
+    border: 1px solid rgba(215, 122, 29, 0.28);
+    background: rgba(215, 122, 29, 0.06);
 }
 
 .timer-label {
@@ -508,6 +496,7 @@ textarea:focus-visible,
     text-transform: uppercase;
     letter-spacing: 0.2rem;
     color: var(--amber);
+    font-weight: 700;
 }
 
 .timer-pill {
@@ -516,88 +505,68 @@ textarea:focus-visible,
     color: var(--amber);
 }
 
-/* Warning state for timer countdown value */
 #countdown-value.warning {
     color: var(--red);
-    text-shadow: 0 0 18px rgba(255, 92, 109, 0.3);
 }
 
-/* ── Reveal Panel (Stage 3) ───────────────────────────────────────────────── */
-
-.reveal-panel {
-    margin-top: 32px;
-    width: min(920px, 100%);
-    border-radius: 20px;
-    padding: 24px 18px 18px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
+.reveal-panel,
+.confidence-section {
+    margin-top: 24px;
+    width: min(880px, 100%);
+    border-radius: 18px;
+    padding: 20px 18px;
+    border: 1px solid rgba(86, 111, 164, 0.16);
     background: rgba(248, 250, 255, 0.95);
     text-align: center;
-}
-
-.hidden {
-    display: none !important;
 }
 
 .clause-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(200px, 1fr));
-    gap: 12px;
-    margin: 20px 0 18px;
+    gap: 10px;
+    margin: 16px 0;
 }
 
 .clause-item {
-    padding: 0.9rem 1rem;
+    padding: 0.85rem 1rem;
     border-radius: 12px;
     background: rgba(105, 173, 255, 0.08);
     border: 1px solid rgba(105, 173, 255, 0.2);
-    color: var(--text);
     font-weight: 700;
+    font-size: 0.88rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
 
-/* ── Confidence Scale (Stage 3) ───────────────────────────────────────────── */
-
-.confidence-section {
-    margin-top: 32px;
-    width: min(920px, 100%);
-    border-radius: 20px;
-    padding: 24px 18px 18px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
-    background: rgba(248, 250, 255, 0.95);
-    text-align: center;
-}
-
 .confidence-scale {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .confidence-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    min-width: 100px;
-    padding: 0.9rem 0.8rem;
+    gap: 4px;
+    min-width: 90px;
+    padding: 0.8rem 0.6rem;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
 }
 
 .confidence-level {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: rgba(86, 111, 164, 0.08);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 800;
     color: var(--muted);
 }
@@ -607,114 +576,193 @@ textarea:focus-visible,
     color: #fff;
 }
 
-/* ── Danger Panel (Stage 4) ───────────────────────────────────────────────── */
+/* ── Stage 3 Data Grid ────────────────────────────────────────────────────── */
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.data-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 110px;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.data-card .icon {
+    font-size: 1.5rem;
+}
+
+.data-card.is-selected,
+.choice-btn.is-selected,
+.owner-btn.is-selected,
+.confidence-btn.is-selected {
+    border-color: var(--purple);
+    background: linear-gradient(135deg, rgba(51, 105, 215, 0.1), rgba(101, 72, 216, 0.12));
+    box-shadow: 0 0 16px rgba(101, 72, 216, 0.18);
+}
+
+.data-card.is-selected::after {
+    content: "✓";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--purple);
+}
+
+.prompt {
+    margin: 22px auto 16px;
+    color: var(--text);
+    font-size: clamp(1.05rem, 1.3vw, 1.5rem);
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-weight: 800;
+    text-align: center;
+}
+
+.prompt.secondary {
+    font-size: clamp(0.95rem, 1.1vw, 1.3rem);
+    margin-top: 24px;
+}
+
+/* ── Stage 4 Dilemma Choices ──────────────────────────────────────────────── */
 
 .danger-panel {
     text-align: center;
 }
 
 .headline {
-    font-size: clamp(1.3rem, 2vw, 2.3rem);
-    max-width: 800px;
+    font-size: clamp(1.2rem, 1.8vw, 2rem);
+    max-width: 820px;
     margin: 0 auto 18px;
-    line-height: 1.35;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+.choice-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.dilemma-choice-card {
+    flex: 1 1 280px;
+    max-width: 360px;
+    min-height: 140px;
+    padding: 16px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dilemma-card-label {
+    font-size: 0.96rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--blue);
+    line-height: 1.3;
+}
+
+.dilemma-card-desc {
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--muted);
+    font-weight: 500;
 }
 
 .selection-box {
-    margin-top: 20px;
-    padding: 1rem 1.2rem;
+    margin-top: 18px;
+    padding: 0.9rem 1.2rem;
     border-radius: 14px;
-    border: 1px solid rgba(101, 72, 216, 0.18);
-    background: rgba(101, 72, 216, 0.05);
-    color: var(--text);
-    font-weight: 700;
+    border: 1px solid rgba(101, 72, 216, 0.2);
+    background: rgba(101, 72, 216, 0.06);
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
+    color: var(--purple);
 }
 
 /* ── Tradeoff Panel (Stage 4) ─────────────────────────────────────────────── */
 
 .tradeoff-panel {
-    margin-top: 24px;
-    padding: 1.2rem;
+    margin: 22px auto 0;
+    max-width: 820px;
+    padding: 18px;
     border-radius: 18px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
-    background: rgba(248, 250, 255, 0.92);
+    border: 1px solid rgba(86, 111, 164, 0.16);
+    background: rgba(248, 250, 255, 0.95);
+    text-align: left;
 }
 
 .tradeoff-panel h3 {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.18rem;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--muted);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    font-weight: 800;
 }
 
 .tradeoff-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
+    gap: 10px;
+    margin-bottom: 14px;
 }
 
 .tradeoff-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0.85rem 1rem;
+    gap: 10px;
+    padding: 0.8rem 1rem;
     border-radius: 12px;
     border-left: 4px solid var(--line);
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
 }
 
-.tradeoff-item.tradeoff-positive {
-    border-left-color: var(--mint);
-}
-
-.tradeoff-item.tradeoff-mixed {
-    border-left-color: var(--amber);
-}
-
-.tradeoff-item.tradeoff-negative {
-    border-left-color: var(--red);
-}
+.tradeoff-item.tradeoff-positive { border-left-color: var(--mint); }
+.tradeoff-item.tradeoff-mixed { border-left-color: var(--amber); }
+.tradeoff-item.tradeoff-negative { border-left-color: var(--red); }
 
 .tradeoff-indicator {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-.tradeoff-dot-positive {
-    background: var(--mint);
-    box-shadow: 0 0 8px rgba(11, 143, 125, 0.35);
-}
-
-.tradeoff-dot-mixed {
-    background: var(--amber);
-    box-shadow: 0 0 8px rgba(215, 122, 29, 0.35);
-}
-
-.tradeoff-dot-negative {
-    background: var(--red);
-    box-shadow: 0 0 8px rgba(214, 58, 77, 0.35);
-}
+.tradeoff-dot-positive { background: var(--mint); }
+.tradeoff-dot-mixed { background: var(--amber); }
+.tradeoff-dot-negative { background: var(--red); }
 
 .tradeoff-dimension {
     flex: 1;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
 .tradeoff-level-label {
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.7rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
     color: var(--muted);
 }
 
@@ -723,417 +771,88 @@ textarea:focus-visible,
     text-align: center;
     color: var(--muted);
     font-style: italic;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.9rem;
 }
 
-/* ── Twist Card (Stage 5) ─────────────────────────────────────────────────── */
+/* ── Twists (Stage 5) ─────────────────────────────────────────────────────── */
 
 .twist-card {
-    min-height: 150px;
+    min-height: 140px;
     padding: 1.4rem 1.1rem;
     border-radius: 18px;
-    border: 1px solid rgba(51, 105, 215, 0.12);
+    border: 1px solid rgba(51, 105, 215, 0.16);
     background: linear-gradient(135deg, rgba(51, 105, 215, 0.04), rgba(101, 72, 216, 0.05));
     text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
 }
 
 .twist-index {
     color: var(--blue);
-    letter-spacing: 0.24rem;
+    letter-spacing: 0.22rem;
     text-transform: uppercase;
     font-size: 0.72rem;
-    margin-bottom: 12px;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
 .twist-card h3 {
-    font-size: clamp(1.5rem, 2vw, 2.3rem);
-    margin-bottom: 16px;
-    line-height: 1.3;
+    font-size: clamp(1.3rem, 1.8vw, 2rem);
+    margin-bottom: 14px;
+    line-height: 1.35;
 }
 
 .twist-controls {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
-/* ── Obligations (Stage 5) ────────────────────────────────────────────────── */
-
-.obligations-section {
-    margin-top: 32px;
-    padding: 24px 18px 18px;
-    border-radius: 20px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
-    background: rgba(248, 250, 255, 0.95);
-    text-align: center;
-}
-
-.obligations-section h3 {
-    font-size: clamp(1.2rem, 1.6vw, 1.8rem);
-    line-height: 1.3;
-    margin-bottom: 8px;
-}
-
-.obligations-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    max-width: 700px;
-    margin: 18px auto;
-}
-
-.obligation-btn {
-    position: relative;
-    display: block;
-    width: 100%;
-    padding: 1rem 2.2rem 1rem 1.2rem;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.92rem;
-    line-height: 1.45;
-}
-
-/* ── Owner Grid (Stage 6) ─────────────────────────────────────────────────── */
+/* ── Ownership (Stage 6) ──────────────────────────────────────────────────── */
 
 .owner-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(180px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
     margin: 18px 0;
 }
 
 .owner-btn {
-    min-height: 120px;
-    font-size: 1rem;
+    min-height: 100px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px;
 }
 
 .prompt-list {
-    margin-top: 26px;
+    margin-top: 22px;
     display: grid;
-    gap: 12px;
-    color: var(--muted);
+    gap: 10px;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .prompt-list p {
     margin: 0;
-    padding: 0.9rem 1rem;
+    padding: 0.85rem 1rem;
     border-radius: 12px;
     background: rgba(244, 247, 255, 0.9);
     border: 1px solid rgba(86, 111, 164, 0.12);
     text-align: center;
     font-weight: 600;
-}
-
-/* ── Commitments (Stage 7) ────────────────────────────────────────────────── */
-
-.commitments-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 14px;
-}
-
-.commitment-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 90px;
-    padding: 0.9rem 1.4rem 0.9rem 0.9rem;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.82rem;
-    line-height: 1.45;
-}
-
-.commitments-reflection {
-    margin: 18px auto;
-    max-width: 700px;
-    padding: 1.1rem 1.2rem;
-    border-radius: 16px;
-    border: 1px solid rgba(11, 143, 125, 0.2);
-    background: linear-gradient(135deg, rgba(126, 240, 213, 0.06), rgba(105, 173, 255, 0.06));
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.commitments-reflection em {
-    font-weight: 700;
-    color: var(--text);
-}
-
-/* ── Mini Grid (Stage 7 original, kept for reference) ─────────────────────── */
-
-.mini-grid {
-    grid-template-columns: repeat(4, minmax(120px, 1fr));
-    margin-bottom: 28px;
-}
-
-.mini-card {
-    min-height: 86px;
-    padding: 0.7rem;
-    border: 1px solid rgba(86, 111, 164, 0.12);
-    background: rgba(249, 251, 255, 0.9);
-    font-size: 0.76rem;
-    line-height: 1.4;
-}
-
-.discussion-blocks {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(240px, 1fr));
-    gap: 18px;
-    margin-top: 18px;
-}
-
-.discussion-blocks>div {
-    min-height: 150px;
-    padding: 1rem 1.2rem;
-    border-radius: 18px;
-    border: 1px solid rgba(101, 72, 216, 0.12);
-    background: rgba(246, 248, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ── Principles Grid (Stage 8) ────────────────────────────────────────────── */
-
-.principles-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 18px;
-}
-
-.principle-card {
-    min-height: 110px;
-    font-size: 0.82rem;
-    letter-spacing: 0.12rem;
-    line-height: 1.5;
-    padding: 1rem 0.8rem;
-}
-
-.limit-note {
-    margin: 0 0 18px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-}
-
-/* ── Ranking Section (Stage 8) ────────────────────────────────────────────── */
-
-.ranking-section {
-    margin-top: 24px;
-    padding: 24px 18px;
-    border-radius: 20px;
-    border: 1px solid rgba(86, 111, 164, 0.14);
-    background: rgba(248, 250, 255, 0.95);
-    text-align: center;
-}
-
-.ranking-section h3 {
-    font-size: clamp(1.2rem, 1.5vw, 1.7rem);
-    line-height: 1.3;
-    margin-bottom: 4px;
-}
-
-.rank-slots {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 20px;
-}
-
-.rank-slot {
-    padding: 1rem 0.8rem;
-    border-radius: 16px;
-    border: 2px dashed var(--line);
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    cursor: default;
-    transition: all 0.22s ease;
-}
-
-.rank-slot.filled {
-    border-style: solid;
-    border-color: rgba(101, 72, 216, 0.4);
-    background: linear-gradient(135deg, rgba(51, 105, 215, 0.06), rgba(101, 72, 216, 0.06));
-    cursor: pointer;
-}
-
-.rank-slot.filled:hover {
-    border-color: var(--red);
-    background: rgba(214, 58, 77, 0.05);
-}
-
-.rank-number {
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.2rem;
-    text-transform: uppercase;
-    color: var(--blue);
-}
-
-.rank-sublabel {
-    font-size: 0.62rem;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
+    font-size: 0.92rem;
     color: var(--muted);
 }
 
-.rank-value {
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text);
-    margin-top: 4px;
-    word-break: break-word;
-}
-
-.rank-options {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 8px;
-}
-
-.rank-option-btn {
-    padding: 0.8rem 1.2rem;
-    font-weight: 700;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-.rank-option-btn:disabled,
-.rank-option-btn.is-ranked {
-    opacity: 0.3;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-/* ── Constitution Card (Stage 8) ──────────────────────────────────────────── */
-
-.constitution-card {
-    margin: 28px auto;
-    max-width: 720px;
-    border-radius: 20px;
-    border: 2px solid rgba(11, 143, 125, 0.3);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(245, 252, 250, 0.98) 100%);
-    box-shadow: 0 12px 40px rgba(11, 143, 125, 0.1);
-    overflow: hidden;
-}
-
-.constitution-header {
-    padding: 20px 24px 16px;
-    text-align: center;
-    border-bottom: 1px solid rgba(11, 143, 125, 0.15);
-}
-
-.constitution-kicker {
-    display: block;
-    font-size: 0.62rem;
-    letter-spacing: 0.3rem;
-    text-transform: uppercase;
-    color: var(--mint);
-    margin-bottom: 6px;
-}
-
-.constitution-header h3 {
-    text-transform: uppercase;
-    letter-spacing: 0.18rem;
-    color: var(--mint);
-    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-}
-
-.constitution-articles {
-    padding: 18px 24px;
-}
-
-.constitution-article {
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(11, 143, 125, 0.08);
-}
-
-.constitution-article:last-child {
-    border-bottom: none;
-}
-
-.article-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.article-numeral {
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.2rem;
-    color: var(--mint);
-    text-transform: uppercase;
-}
-
-.article-rank {
-    font-size: 0.68rem;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
-    color: var(--muted);
-}
-
-.article-title {
-    font-size: 1.1rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-}
-
-.article-text {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    font-style: italic;
-}
-
-.constitution-footer {
-    padding: 14px 24px;
-    text-align: center;
-    border-top: 1px solid rgba(11, 143, 125, 0.12);
-    background: rgba(11, 143, 125, 0.03);
-}
-
-.constitution-footer p {
-    margin: 0;
-    font-size: 0.72rem;
-    letter-spacing: 0.12rem;
-    text-transform: uppercase;
-    color: var(--muted);
-}
-
-.constitution-date {
-    margin-top: 4px !important;
-    font-weight: 700;
-}
-
-/* ── Discussion Connection (shared component) ─────────────────────────────── */
+/* ── Discussion Connection Box ────────────────────────────────────────────── */
 
 .discussion-connection {
-    margin: 24px auto 14px;
-    max-width: 800px;
-    padding: 18px 20px;
+    margin: 22px auto 14px;
+    max-width: 820px;
+    padding: 16px 20px;
     border-radius: 16px;
     border-left: 4px solid var(--purple);
     background: rgba(101, 72, 216, 0.04);
@@ -1141,10 +860,9 @@ textarea:focus-visible,
 }
 
 .discussion-connection p {
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     font-size: 0.92rem;
-    line-height: 1.6;
-    color: var(--text);
+    line-height: 1.55;
 }
 
 .discussion-connection p:last-child {
@@ -1152,50 +870,29 @@ textarea:focus-visible,
 }
 
 .connection-label {
-    font-size: 0.7rem !important;
+    font-size: 0.68rem !important;
     font-weight: 800;
-    letter-spacing: 0.22rem;
+    letter-spacing: 0.2rem;
     text-transform: uppercase;
     color: var(--purple) !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 8px !important;
 }
 
 .connection-note {
-    font-size: 0.85rem !important;
+    font-size: 0.84rem !important;
     color: var(--muted) !important;
     font-style: italic;
 }
 
-/* ── Disclaimer (Stage 1) ─────────────────────────────────────────────────── */
-
-.disclaimer {
-    margin-top: 28px;
-    max-width: 640px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: 1px solid rgba(86, 111, 164, 0.12);
-    background: rgba(248, 250, 255, 0.8);
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: var(--muted);
-    text-align: center;
-}
-
-.disclaimer strong {
-    color: var(--text);
-}
-
-/* ── Final Panel (Stage 9) ────────────────────────────────────────────────── */
+/* ── Final Reflection (Stage 7) ───────────────────────────────────────────── */
 
 .final-panel {
     text-align: center;
 }
 
-/* ── Decisions Recap (Stage 9) ────────────────────────────────────────────── */
-
 .decisions-recap {
-    margin: 18px auto 28px;
-    max-width: 800px;
+    margin: 16px auto 26px;
+    max-width: 820px;
     text-align: left;
 }
 
@@ -1203,9 +900,10 @@ textarea:focus-visible,
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.18rem;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--muted);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+    font-weight: 800;
 }
 
 .recap-grid {
@@ -1217,8 +915,8 @@ textarea:focus-visible,
 .recap-item {
     padding: 0.8rem 1rem;
     border-radius: 12px;
-    border: 1px solid rgba(86, 111, 164, 0.1);
-    background: rgba(248, 250, 255, 0.9);
+    border: 1px solid rgba(86, 111, 164, 0.12);
+    background: rgba(248, 250, 255, 0.95);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1230,84 +928,86 @@ textarea:focus-visible,
 
 .recap-label {
     font-size: 0.68rem;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.14rem;
+    letter-spacing: 0.12rem;
     color: var(--muted);
 }
 
 .recap-value {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--text);
 }
 
-/* ── Reflection Section (Stage 9) ─────────────────────────────────────────── */
-
-.reflection-section {
+.role-swap-section {
     margin: 28px auto;
-    max-width: 800px;
-    text-align: center;
+    max-width: 860px;
 }
 
-.reflection-section h3 {
+.role-swap-section h3 {
+    font-size: 1.2rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    letter-spacing: 0.18rem;
-    font-size: clamp(1.2rem, 1.5vw, 1.6rem);
-    margin-bottom: 18px;
-}
-
-.reflection-question {
-    margin-bottom: 24px;
-    padding: 18px;
-    border-radius: 16px;
-    border: 1px solid rgba(86, 111, 164, 0.1);
-    background: rgba(248, 250, 255, 0.9);
-}
-
-.reflection-textarea,
-.final-textarea {
-    display: block;
-    width: 100%;
-    max-width: 600px;
-    margin: 14px auto 0;
-    padding: 12px 14px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.9);
-    font-family: inherit;
-    font-size: 0.9rem;
-    line-height: 1.6;
     color: var(--text);
-    resize: vertical;
+    margin-bottom: 4px;
 }
 
-.reflection-textarea:focus,
-.final-textarea:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(51, 105, 215, 0.12);
+.role-swap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 18px 0;
 }
 
-.reflection-textarea::placeholder,
-.final-textarea::placeholder {
-    color: rgba(66, 85, 121, 0.5);
+.role-swap-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(86, 111, 164, 0.16);
+    border-radius: 16px;
+    padding: 16px 14px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-/* ── Synthesis Section (Stage 9) ──────────────────────────────────────────── */
+.swap-icon {
+    font-size: 1.8rem;
+}
+
+.role-swap-card h4 {
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--purple);
+}
+
+.swap-question {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--text);
+    margin: 0;
+}
+
+.swap-reflection {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: auto 0 0;
+}
 
 .synthesis-section {
-    margin: 32px auto;
-    max-width: 800px;
+    margin: 28px auto;
+    max-width: 820px;
 }
 
 .synthesis-section h3 {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.14rem;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--muted);
-    margin-bottom: 18px;
+    margin-bottom: 14px;
+    font-weight: 800;
 }
 
 .synthesis-list {
@@ -1318,179 +1018,76 @@ textarea:focus-visible,
 .synthesis-item {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     padding: 0.9rem 1.2rem;
     border-radius: 12px;
     border: 1px solid rgba(86, 111, 164, 0.12);
-    background: rgba(248, 250, 255, 0.9);
+    background: rgba(248, 250, 255, 0.95);
+    text-align: left;
 }
 
 .synthesis-number {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(51, 105, 215, 0.1), rgba(101, 72, 216, 0.1));
-    font-weight: 800;
-    font-size: 0.85rem;
+    background: linear-gradient(135deg, rgba(51, 105, 215, 0.12), rgba(101, 72, 216, 0.12));
+    font-weight: 900;
+    font-size: 0.82rem;
     color: var(--purple);
     flex-shrink: 0;
 }
 
 .synthesis-item p {
     margin: 0;
-    font-weight: 600;
-    color: var(--text);
-    font-size: 0.92rem;
-    text-align: left;
+    font-size: 0.88rem;
+    line-height: 1.45;
 }
 
-/* ── Final Discussion (Stage 9) ───────────────────────────────────────────── */
-
-.final-discussion {
-    margin: 28px auto;
-    max-width: 700px;
+.disclaimer {
+    margin-top: 24px;
+    max-width: 620px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(86, 111, 164, 0.12);
+    background: rgba(248, 250, 255, 0.8);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--muted);
     text-align: center;
 }
 
-.final-discussion h3 {
-    text-transform: uppercase;
-    letter-spacing: 0.18rem;
-    margin-bottom: 4px;
-}
-
-.final-textarea {
-    max-width: 100%;
-}
-
-/* ── Old Final Questions (preserved for compatibility) ────────────────────── */
-
-.final-questions {
-    display: grid;
-    gap: 14px;
-    margin: 24px 0 26px;
-}
-
-.final-questions p {
-    margin: 0;
-    padding: 1rem 1.2rem;
-    border-radius: 12px;
-    border: 1px solid rgba(86, 111, 164, 0.12);
-    background: rgba(248, 250, 255, 0.9);
-    color: var(--muted);
-    font-weight: 600;
-}
-
-/* ── Responsive: Tablet ───────────────────────────────────────────────────── */
+/* ── Responsive ───────────────────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
-    .app-shell {
-        width: min(94vw, 100%);
-        padding: 18px 18px 14px;
+    .character-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-        margin: -18px -18px 0;
-        padding: 14px 18px;
+    .briefing-stats {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .progress-panel {
-        width: 100%;
-        min-width: 0;
+    .data-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .data-grid,
-    .owner-grid,
-    .principles-grid,
-    .discussion-blocks,
-    .clause-list,
-    .commitments-grid {
-        grid-template-columns: repeat(2, minmax(150px, 1fr));
+    .owner-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .mini-grid {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
-    }
-
-    .choice-row.double .choice-btn,
-    .choice-row.triple .choice-btn,
-    .choice-btn.crisis {
-        min-width: min(100%, 260px);
-    }
-
-    .tradeoff-grid {
+    .role-swap-grid {
         grid-template-columns: 1fr;
     }
-
-    .rank-slots {
-        grid-template-columns: 1fr;
-    }
-
+    .tradeoff-grid,
     .recap-grid {
         grid-template-columns: 1fr;
     }
-
-    .confidence-scale {
-        gap: 8px;
-    }
-
-    .confidence-btn {
-        min-width: 80px;
-        padding: 0.7rem 0.5rem;
-        font-size: 0.72rem;
-    }
 }
 
-/* ── Responsive: Mobile ───────────────────────────────────────────────────── */
-
 @media (max-width: 600px) {
-
+    .character-grid,
+    .briefing-stats,
     .data-grid,
-    .owner-grid,
-    .principles-grid,
-    .discussion-blocks,
-    .clause-list,
-    .mini-grid,
-    .commitments-grid {
+    .owner-grid {
         grid-template-columns: 1fr;
-    }
-
-    .control-bar {
-        gap: 10px;
-    }
-
-    .nav-btn {
-        min-width: 0;
-        flex: 1;
-    }
-
-    .topbar {
-        padding-bottom: 10px;
-    }
-
-    .confidence-scale {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .confidence-btn {
-        width: 100%;
-        max-width: 300px;
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    .rank-options {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .rank-option-btn {
-        width: 100%;
-        max-width: 300px;
     }
 }

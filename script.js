@@ -1,105 +1,340 @@
-// This file is designed so a beginner can easily edit the simulation flow.
-// To change stages, update the HTML in index.html.
-// To change the twist prompts, adjust the twistDeck array below.
-// To change a choice label, update the matching button text in the HTML.
+// ── Configuration & State ───────────────────────────────────────────────────
 
-const totalStages = 9;
-
-// ── State ────────────────────────────────────────────────────────────────────
+const totalStages = 7;
 
 const state = {
+    selectedRole: null, // "consumer", "executive", "buyer", "data-scientist"
     currentStage: 0,
-    // Stage 2
-    soldData: [],
-    // Stage 3
+    // Stage 2 (Consumer)
     consentChoice: null,
     consentUnderstanding: null,
     confidenceRating: null,
-    // Stage 4
-    bankruptcyChoice: null,
-    // Stage 5
+    // Stage 3 (Data Selection)
+    selectedDataTypes: [],
+    // Stage 4 (Core Dilemma)
+    dilemmaChoice: null,
+    // Stage 5 (Twists)
     twistIndex: 0,
     twistAnswers: [],
-    obligationsShown: false,
-    selectedObligations: [],
-    // Stage 6
+    // Stage 6 (Ownership)
     ownerChoice: null,
-    // Stage 7
-    selectedCommitments: [],
-    // Stage 8
-    selectedPrinciples: [],
-    principleRanking: [],
-    // Stage 9
-    reflections: { own: null, family: null, public: null },
-    textResponses: {},
     // Timer
     consentTimerSeconds: 30,
     consentTimerId: null,
 };
 
-// ── Data ─────────────────────────────────────────────────────────────────────
+// ── Role Content Definitions ────────────────────────────────────────────────
 
-const twistDeck = [
-    {
-        title: "The buyer promises to follow the existing privacy agreement.",
-        question: "Does this change your decision?",
+const roleProfiles = {
+    consumer: {
+        id: "consumer",
+        name: "THE CONSUMER",
+        icon: "🛒",
+        context: {
+            eyebrow: "STAGE 02 • YOUR PERSPECTIVE",
+            title: "YOU SENT YOUR SALIVA IN A TUBE.",
+            lead: "Five years ago, you paid $99 to learn where your ancestors came from and discover genetic health risks.",
+            bodyHtml: `
+                <div class="context-story-card">
+                    <p>You checked a box saying "I agree to the Terms of Service" without reading the 42 pages of fine print.</p>
+                    <p>Now you see news alerts: <strong>23andMe is facing bankruptcy</strong>, and they might sell their entire database to the highest bidder to pay off debts.</p>
+                    <p class="callout-text">Let's see what you actually signed up for back then.</p>
+                </div>
+            `,
+            showPolicy: true,
+        },
+        dataPrompt: {
+            eyebrow: "STAGE 03 • YOUR COMFORT ZONE",
+            title: "WHAT DATA ARE YOU COMFORTABLE SHARING?",
+            prompt: "Select the types of personal data you would be comfortable with 23andMe sharing with other companies.",
+            discussion: "What makes sharing one category of your data more or less acceptable than another? Is genetic data different from location or shopping data?",
+            note: "Consider: You can change your password or credit card number if it's breached. You cannot change your DNA.",
+        },
+        dilemma: {
+            eyebrow: "STAGE 04 • BREAKING NEWS",
+            title: "YOUR DNA IS ABOUT TO BE AUCTIONED.",
+            headline: "23andMe is entering Chapter 11 bankruptcy. A pharmaceutical conglomerate has bid $50M to acquire the customer database.",
+            prompt: "WHAT ACTION DO YOU TAKE AS A CONSUMER?",
+            choices: [
+                { id: "delete", label: "1. REQUEST DATA DELETION", desc: "Demand your account and biological samples be destroyed immediately." },
+                { id: "join-lawsuit", label: "2. JOIN CLASS-ACTION LAWSUIT", desc: "Sue to block the transfer of genetic assets without explicit re-consent." },
+                { id: "accept-research", label: "3. ALLOW TRANSFER FOR CURES", desc: "Accept the transfer if it promises to advance medical cures and drug discovery." }
+            ],
+            tradeoffs: {
+                delete: [
+                    { dimension: "Personal Privacy Protection", level: "positive" },
+                    { dimension: "Control Over Future Use", level: "positive" },
+                    { dimension: "Contribution to Medical Research", level: "negative" },
+                    { dimension: "Certainty (Will backups really be wiped?)", level: "mixed" },
+                ],
+                "join-lawsuit": [
+                    { dimension: "Advocacy for Consumer Rights", level: "positive" },
+                    { dimension: "Immediate Resolution", level: "negative" },
+                    { dimension: "Public Awareness", level: "positive" },
+                    { dimension: "Legal Complexity & Delay", level: "mixed" },
+                ],
+                "accept-research": [
+                    { dimension: "Potential Medical Discoveries", level: "positive" },
+                    { dimension: "Personal Privacy & Relative Impact", level: "negative" },
+                    { dimension: "Corporate Profit off Your DNA", level: "negative" },
+                    { dimension: "Convenience / Peace of Mind", level: "mixed" },
+                ]
+            },
+            discussion: "If you delete your profile, what happens to the aggregate data and research models already trained on your genome?"
+        },
+        twists: [
+            {
+                title: "The buyer claims all transferred genetic data will be 'de-identified' and aggregated.",
+                question: "Does this ease your privacy concerns?"
+            },
+            {
+                title: "Your biological sibling never signed up for 23andMe, but because you did, 50% of their DNA markers are identifiable.",
+                question: "Do you have the moral right to decide what happens to shared family DNA?"
+            },
+            {
+                title: "The acquiring company announces a breakthrough Alzheimer's treatment using this exact database.",
+                question: "Does this justify selling the data without your renewed consent?"
+            }
+        ],
+        ownerQuestion: "Does your answer change knowing your biological relatives' privacy is also exposed by your genome?"
     },
-    {
-        title: "The buyer says the data will be anonymized.",
-        question: "Does this change your decision?",
-    },
-    {
-        title: "The research could potentially contribute to new treatments for serious diseases.",
-        question: "Does this change your decision?",
-    },
-    {
-        title: "The buyer wants to combine the genetic data with purchasing and location data.",
-        question: "Does this change your decision?",
-    },
-    {
-        title: "Some users explicitly asked for their data to be deleted.",
-        question: "Can the company sell the database anyway?",
-    },
-];
 
-const tradeoffProfiles = {
-    sell: [
-        { dimension: "Financial Sustainability", level: "positive" },
-        { dimension: "User Trust", level: "negative" },
-        { dimension: "Privacy Protection", level: "negative" },
-        { dimension: "Research / Public Benefit", level: "mixed" },
-    ],
-    "sell-conditions": [
-        { dimension: "Financial Sustainability", level: "mixed" },
-        { dimension: "User Trust", level: "mixed" },
-        { dimension: "Privacy Protection", level: "mixed" },
-        { dimension: "Research / Public Benefit", level: "positive" },
-    ],
-    refuse: [
-        { dimension: "Financial Sustainability", level: "negative" },
-        { dimension: "User Trust", level: "positive" },
-        { dimension: "Privacy Protection", level: "positive" },
-        { dimension: "Research / Public Benefit", level: "negative" },
-    ],
-};
+    executive: {
+        id: "executive",
+        name: "THE EXECUTIVE",
+        icon: "💼",
+        context: {
+            eyebrow: "STAGE 02 • THE BOARDROOM",
+            title: "THE COMPANY IS RUNNING OUT OF CASH.",
+            lead: "As Chief Executive Officer, you are responsible for 400 employees, public shareholders, and creditors.",
+            stats: [
+                { value: "$50M", label: "Cash Burn / Year" },
+                { value: "400", label: "Employees At Risk" },
+                { value: "15M+", label: "Genotyped Customers" },
+                { value: "30 Days", label: "Runway Remaining" }
+            ],
+            bodyHtml: `
+                <div class="context-story-card">
+                    <p>The consumer genetics business model has hit a wall: once people find their ancestry, they stop paying subscription fees.</p>
+                    <p>Creditors are at the door. If the company liquidates in Chapter 7 bankruptcy, a court bankruptcy trustee will sell your assets anyway to the highest bidder.</p>
+                    <p class="callout-text">Your primary valuable asset is the anonymized database of 15+ million human genomes.</p>
+                </div>
+            `,
+            showPolicy: false,
+        },
+        dataPrompt: {
+            eyebrow: "STAGE 03 • MONETIZATION STRATEGY",
+            title: "WHAT ASSETS DO YOU PUT ON THE TABLE?",
+            prompt: "Select the categories of user data you are willing to bundle into the asset sale package.",
+            discussion: "Which data categories generate the highest commercial valuation, and which ones carry catastrophic reputational/legal risk?",
+            note: "Valuation insight: Bundling health surveys + DNA multiplies the database value 5x compared to raw genetic markers alone.",
+        },
+        dilemma: {
+            eyebrow: "STAGE 04 • THE BUYOUT OFFER",
+            title: "A $50,000,000 LIFELINE FROM BIG PHARMA.",
+            headline: "NovaCure Pharmaceuticals offers $50M in cash for complete access and ownership of 23andMe's research databases.",
+            prompt: "WHAT DO YOU PROPOSE TO THE BOARD OF DIRECTORS?",
+            choices: [
+                { id: "sell-unrestricted", label: "1. ACCEPT UNRESTRICTED SALE", desc: "Sell full database ownership to NovaCure to maximize cash and pay all creditors in full." },
+                { id: "sell-conditional", label: "2. SELL WITH ETHICAL STRINGS", desc: "Require NovaCure to guarantee original privacy promises and give users 30 days to opt out (accept 40% lower valuation)." },
+                { id: "destroy-liquidate", label: "3. REFUSE & PURGE DATA", desc: "Block the data sale and order all genetic records wiped before entering bankruptcy liquidation." }
+            ],
+            tradeoffs: {
+                "sell-unrestricted": [
+                    { dimension: "Fiduciary Duty to Creditors/Investors", level: "positive" },
+                    { dimension: "Severance & Survival for Employees", level: "positive" },
+                    { dimension: "User Trust & Historical Reputation", level: "negative" },
+                    { dimension: "Public Backlash / Regulatory Inquiries", level: "negative" },
+                ],
+                "sell-conditional": [
+                    { dimension: "Fiduciary Compromise (Lower Payout)", level: "mixed" },
+                    { dimension: "Ethical Responsibility & User Respect", level: "positive" },
+                    { dimension: "Deal Completion Risk (Buyer may walk)", level: "mixed" },
+                    { dimension: "Regulatory & Legal Defense", level: "positive" },
+                ],
+                "destroy-liquidate": [
+                    { dimension: "Total User Privacy Protection", level: "positive" },
+                    { dimension: "Legal Liability to Creditors (Lawsuits against Board)", level: "negative" },
+                    { dimension: "Complete Loss of Jobs & Company Value", level: "negative" },
+                    { dimension: "Destruction of Valuable Medical Research", level: "negative" },
+                ]
+            },
+            discussion: "Under corporate law, executives have a fiduciary duty to maximize value for creditors in insolvency. Is breaking trust with users an acceptable price?"
+        },
+        twists: [
+            {
+                title: "A foreign healthcare conglomerate offers $120M—more than double NovaCure—but operates outside US FTC jurisdiction.",
+                question: "Do you take the higher bid to save more employee jobs and pay off all debt?"
+            },
+            {
+                title: "State Attorneys General warn they will sue to halt any sale that includes users who never checked 'research consent'.",
+                question: "Do you spend dwindling cash fighting them in court to close the deal?"
+            },
+            {
+                title: "Your engineering lead warns that extracting and purging opt-outs will delay the sale by 6 months, causing immediate insolvency.",
+                question: "Do you proceed with the sale without processing pending deletion requests?"
+            }
+        ],
+        ownerQuestion: "Does your answer change if selling the database is the only way to fund employee severance and prevent immediate collapse?"
+    },
 
-const principleDescriptions = {
-    "MEANINGFUL INFORMED CONSENT":
-        "We will ensure that participants truly understand what they are agreeing to — not merely sign a document.",
-    "DATA MINIMIZATION":
-        "We will collect only the data we need, and nothing more.",
-    "USER CONTROL AND DELETION":
-        "We will give people meaningful control over their data, including the right to have it deleted.",
-    "TRANSPARENCY":
-        "We will be clear and honest about how data is collected, used, and shared.",
-    "PRIVACY AND SECURITY":
-        "We will protect data from unauthorized access and treat privacy as a fundamental right.",
-    "RESTRICTIONS ON COMMERCIALIZATION":
-        "We will not treat personal data as a commodity to be bought and sold without meaningful safeguards.",
-    "RESEARCH / PUBLIC BENEFIT":
-        "We will ensure that data use serves the public good and advances beneficial research.",
-    "ACCOUNTABILITY":
-        "We will take responsibility for our data practices and their consequences.",
+    buyer: {
+        id: "buyer",
+        name: "THE BUYER",
+        icon: "🏢",
+        context: {
+            eyebrow: "STAGE 02 • M&A STRATEGY",
+            title: "ACQUIRING THE WORLD'S GENOMIC TREASURY.",
+            lead: "You are the VP of Strategic Acquisitions at NovaCure Pharmaceuticals.",
+            stats: [
+                { value: "$1.2B", label: "Drug Dev Cost" },
+                { value: "10-15 Yrs", label: "Time to Market" },
+                { value: "85%", label: "Target Failure Rate" },
+                { value: "15M", label: "Patient Profiles" }
+            ],
+            bodyHtml: `
+                <div class="context-story-card">
+                    <p>Drug discovery is excruciatingly slow and expensive. Access to 15 million genotyped individuals with matched disease histories could unlock treatments for Parkinson's, cancer, and rare autoimmune disorders.</p>
+                    <p>Building this cohort from scratch would cost billions and take decades. 23andMe's bankruptcy is a once-in-a-generation acquisition opportunity.</p>
+                    <p class="callout-text">Your challenge: How to maximize the research and commercial value of the asset without inciting a regulatory nightmare.</p>
+                </div>
+            `,
+            showPolicy: false,
+        },
+        dataPrompt: {
+            eyebrow: "STAGE 03 • ASSET TARGETING",
+            title: "WHICH DATASETS ARE ESSENTIAL TO YOUR PIPELINE?",
+            prompt: "Select the data categories your pharmaceutical AI models need to train precision medicine algorithms.",
+            discussion: "If genetic data is completely stripped of lifestyle surveys and health symptoms, does it lose its medicinal value?",
+            note: "AI research insight: Without linked phenotype data (family history, diet, diagnosed diseases), raw DNA sequences provide limited insight for targeted drug synthesis.",
+        },
+        dilemma: {
+            eyebrow: "STAGE 04 • ACQUISITION TERMS",
+            title: "HOW DO YOU STRUCTURE THE DATA ACQUISITION?",
+            headline: "NovaCure is drafting its final bid for the bankruptcy court hearing tomorrow morning.",
+            prompt: "WHAT ACQUISITION FRAMEWORK DO YOU SUBMIT?",
+            choices: [
+                { id: "clean-slate", label: "1. BUY WITHOUT PAST LIABILITIES", desc: "Purchase the asset 'free and clear' of prior terms; apply NovaCure's proprietary terms of service." },
+                { id: "honor-consent", label: "2. HONOR LEGACY PRIVACY & RE-CONSENT", desc: "Strictly segregate users who opted into research and solicit fresh explicit consent for commercial drug trials." },
+                { id: "open-consortium", label: "3. NON-PROFIT RESEARCH ALLIANCE", desc: "Form an open scientific consortium with NIH/Universities, sharing data publicly while keeping royalty rights on discovered targets." }
+            ],
+            tradeoffs: {
+                "clean-slate": [
+                    { dimension: "Speed of Drug Discovery Pipeline", level: "positive" },
+                    { dimension: "Exclusivity & Commercial Profitability", level: "positive" },
+                    { dimension: "Public Trust & Ethical Standing", level: "negative" },
+                    { dimension: "FTC & Regulatory Scrutiny", level: "negative" },
+                ],
+                "honor-consent": [
+                    { dimension: "Ethical Legitimacy & User Respect", level: "positive" },
+                    { dimension: "Regulatory & Compliance Safety", level: "positive" },
+                    { dimension: "Usable Dataset Size (Drop-off up to 60%)", level: "negative" },
+                    { dimension: "Return on Investment (ROI)", level: "mixed" },
+                ],
+                "open-consortium": [
+                    { dimension: "Global Scientific & Public Benefit", level: "positive" },
+                    { dimension: "Academic & Institutional Goodwill", level: "positive" },
+                    { dimension: "Direct Corporate Monopoly Profits", level: "negative" },
+                    { dimension: "Complex Multi-Stakeholder Governance", level: "mixed" },
+                ]
+            },
+            discussion: "When you buy physical machines at bankruptcy, you inherit no moral relationship with past customers. Does acquiring intimate personal data follow the same rules?"
+        },
+        twists: [
+            {
+                title: "Your modeling team discovers that de-anonymizing rare genetic variants is possible using publicly available genealogy registries.",
+                question: "Do you allow internal research teams to re-identify patients to verify clinical outcomes?"
+            },
+            {
+                title: "A major health insurer offers to co-fund the acquisition in exchange for risk-scoring analytics on customer cohorts.",
+                question: "Do you monetize the database through secondary insurance partnerships?"
+            },
+            {
+                title: "Federal regulators signal they will approve the purchase only if your patents resulting from the data are capped at generic pricing.",
+                question: "Do you still proceed with buying the database under pricing caps?"
+            }
+        ],
+        ownerQuestion: "Does your answer change if commercial incentives are the only realistic engine to fund lifesaving drug trials?"
+    },
+
+    "data-scientist": {
+        id: "data-scientist",
+        name: "THE DATA SCIENTIST",
+        icon: "🔬",
+        context: {
+            eyebrow: "STAGE 02 • THE ETHICAL CRUCIBLE",
+            title: "YOU DISCOVER WHAT'S IN THE SALE PIPELINE.",
+            lead: "You are a Senior Data Scientist at 23andMe. You have $87,000 in student loan debt and support your family.",
+            stats: [
+                { value: "$87,000", label: "Student Loan Debt" },
+                { value: "$1,450", label: "Monthly Payment" },
+                { value: "H-1B / Visa", label: "Dependent on Job" },
+                { value: "2 Weeks", label: "Emergency Savings" }
+            ],
+            bodyHtml: `
+                <div class="context-story-card">
+                    <p>While preparing the data export pipeline for prospective bidders, you discover that the data dump includes records of users who explicitly hit <strong>'Delete My Account'</strong> over the past two years.</p>
+                    <p>Because of engineering backlogs and legacy schema designs, their raw genome files were 'soft-deleted' in UI views but remained in the analytical warehouse.</p>
+                    <p class="callout-text">When you flag this to management, a director quietly whispers: <em>"Don't hold up this deal. If the sale collapses, everyone's out of a job by Friday—including you."</em></p>
+                </div>
+            `,
+            showPolicy: false,
+        },
+        dataPrompt: {
+            eyebrow: "STAGE 03 • AUDITING THE PIPELINE",
+            title: "WHICH DATA LEAKS POSE THE GRAVEST ETHICAL RISKS?",
+            prompt: "Select the categories of residual or unscrubbed data you are most alarmed to find in the unredacted export bucket.",
+            discussion: "Why is an internal data scientist often the only barrier between algorithmic convenience and systemic violation of user rights?",
+            note: "Engineering reality: In massive distributed data lakes, true 'Right to be Forgotten' compliance is technically demanding and frequently neglected under deadline crunch.",
+        },
+        dilemma: {
+            eyebrow: "STAGE 04 • THE WHISTLEBLOWER DILEMMA",
+            title: "SPEAK UP OR PROTECT YOUR LIVELIHOOD?",
+            headline: "The data package is scheduled to be transferred to the buyer's cloud infrastructure at midnight.",
+            prompt: "WHAT CHOICE DO YOU MAKE TONIGHT?",
+            choices: [
+                { id: "whistleblow", label: "1. BLOW THE WHISTLE EXTERNALLY", desc: "Leak documentation of the non-deleted records to the FTC and investigative journalists. (Face termination, legal threat, and loan default)." },
+                { id: "internal-escalate", label: "2. HARD ESCALATION INTERNALLY", desc: "Threaten to resign immediately and write a formal memo to the Board of Directors demanding a halt until scrubbed." },
+                { id: "stay-quiet", label: "3. COMPLY & PROTECT YOUR FINANCIAL SURVIVAL", desc: "Keep your head down, process the pipeline, collect your severance, and pay your student loans." }
+            ],
+            tradeoffs: {
+                whistleblow: [
+                    { dimension: "Personal Ethical Integrity & Public Duty", level: "positive" },
+                    { dimension: "Protection for 100,000+ Deleted Users", level: "positive" },
+                    { dimension: "Personal Financial & Career Stability ($87k Loans)", level: "negative" },
+                    { dimension: "Threat of Corporate Lawsuits & Retaliation", level: "negative" },
+                ],
+                "internal-escalate": [
+                    { dimension: "Professional Due Diligence", level: "positive" },
+                    { dimension: "Chance of Internal Correction without Scandal", level: "mixed" },
+                    { dimension: "Risk of Being Sidelined / Fired Silently", level: "negative" },
+                    { dimension: "Personal Career Protection", level: "mixed" },
+                ],
+                "stay-quiet": [
+                    { dimension: "Financial Security & Student Loan Solvency", level: "positive" },
+                    { dimension: "Family Protection & Visa/Job Continuity", level: "positive" },
+                    { dimension: "Complicity in Unethical Data Transfer", level: "negative" },
+                    { dimension: "Long-term Moral Injury & Guilt", level: "negative" },
+                ]
+            },
+            discussion: "Ethics isn't free. When doing the right thing jeopardizes your ability to pay rent or service $87k in student debt, what is the realistic threshold for moral courage?"
+        },
+        twists: [
+            {
+                title: "An anonymous colleague tells you they are preparing an SEC whistleblower tip and asks you to sign your name with them.",
+                question: "Do you join the whistleblower complaint knowing collective protection is stronger but discovery is guaranteed?"
+            },
+            {
+                title: "The buyer offers retention bonuses of $40,000 cash to all data science staff who transition and support the pipeline integration.",
+                question: "Does the immediate opportunity to wipe out half your student loans tempt you to assist the migration?"
+            },
+            {
+                title: "You realize you have write-access to the script repository and could quietly execute an unrecoverable hard-purge of the deleted records before leaving.",
+                question: "Do you take matters into your own hands through rogue code intervention?"
+            }
+        ],
+        ownerQuestion: "Does your answer change when an individual technician carries the sole moral burden for a multi-million dollar corporate system?"
+    }
 };
 
 // ── DOM References ───────────────────────────────────────────────────────────
@@ -107,16 +342,55 @@ const principleDescriptions = {
 const stageNumberEl = document.getElementById("stage-number");
 const stageTotalEl = document.getElementById("stage-total");
 const progressFillEl = document.getElementById("progress-fill");
+const roleBadgeEl = document.getElementById("role-badge");
+const roleBadgeIconEl = document.getElementById("role-badge-icon");
+const roleBadgeLabelEl = document.getElementById("role-badge-label");
+
 const screens = [...document.querySelectorAll(".screen")];
+
+// Stage 2
+const contextEyebrowEl = document.getElementById("context-eyebrow");
+const contextTitleEl = document.getElementById("context-title");
+const contextLeadEl = document.getElementById("context-lead");
+const contextStatsEl = document.getElementById("context-stats");
+const contextBodyEl = document.getElementById("context-body");
+const policySectionEl = document.getElementById("policy-section");
+const contextContinueBtnEl = document.getElementById("context-continue-btn");
 const countdownValueEl = document.getElementById("countdown-value");
 const consentRevealEl = document.getElementById("consent-reveal");
-const bankruptcySummaryEl = document.getElementById("bankruptcy-summary");
+const confidenceSectionEl = document.getElementById("confidence-section");
+
+// Stage 3
+const dataEyebrowEl = document.getElementById("data-eyebrow");
+const dataTitleEl = document.getElementById("data-title");
+const dataPromptEl = document.getElementById("data-prompt");
+const dataDiscussionTextEl = document.getElementById("data-discussion-text");
+const dataDiscussionNoteEl = document.getElementById("data-discussion-note");
+
+// Stage 4
+const dilemmaEyebrowEl = document.getElementById("dilemma-eyebrow");
+const dilemmaTitleEl = document.getElementById("dilemma-title");
+const dilemmaHeadlineEl = document.getElementById("dilemma-headline");
+const dilemmaPromptEl = document.getElementById("dilemma-prompt");
+const dilemmaChoicesEl = document.getElementById("dilemma-choices");
+const dilemmaSummaryEl = document.getElementById("dilemma-summary");
+const dilemmaTradeoffPanelEl = document.getElementById("dilemma-tradeoff-panel");
+const dilemmaTradeoffGridEl = document.getElementById("dilemma-tradeoff-grid");
+const dilemmaDiscussionEl = document.getElementById("dilemma-discussion");
+const dilemmaDiscussionTextEl = document.getElementById("dilemma-discussion-text");
+const dilemmaContinueBtnEl = document.getElementById("dilemma-continue");
+
+// Stage 5
 const twistTitleEl = document.getElementById("twist-title");
 const twistQuestionEl = document.getElementById("twist-question");
 const twistIndexTextEl = document.getElementById("twist-index-text");
 const twistSummaryEl = document.getElementById("twist-summary");
+const revealTwistBtnEl = document.getElementById("reveal-next-twist");
+const continueAfterTwistsBtnEl = document.getElementById("continue-after-twists");
+
+// Stage 6
 const ownerSummaryEl = document.getElementById("owner-summary");
-const principleLimitNoteEl = document.getElementById("principle-limit-note");
+const ownerRoleQuestionEl = document.getElementById("owner-role-question");
 
 // ── Navigation ───────────────────────────────────────────────────────────────
 
@@ -131,6 +405,17 @@ function updateProgress() {
     progressFillEl.style.width = `${progress}%`;
 }
 
+function updateRoleBadge() {
+    if (!state.selectedRole) {
+        roleBadgeEl.classList.add("hidden");
+        return;
+    }
+    const role = roleProfiles[state.selectedRole];
+    roleBadgeIconEl.textContent = role.icon;
+    roleBadgeLabelEl.textContent = role.name;
+    roleBadgeEl.classList.remove("hidden");
+}
+
 function showScreen(index) {
     state.currentStage = clampStage(index);
 
@@ -141,8 +426,8 @@ function showScreen(index) {
     updateProgress();
     syncStageSpecificUI();
 
-    // Scroll to top of the app shell when changing stages
-    document.querySelector(".app-shell").scrollTo({ top: 0, behavior: "smooth" });
+    const shell = document.querySelector(".app-shell");
+    if (shell) shell.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function goToNext() {
@@ -160,30 +445,32 @@ function goToPrevious() {
 // ── Selection State Sync ─────────────────────────────────────────────────────
 
 function syncSelectionStates() {
-    // Stage 2: data cards
-    document.querySelectorAll(".data-card").forEach((card) => {
-        const selected = state.soldData.includes(card.dataset.dataType);
-        card.classList.toggle("is-selected", selected);
-        card.setAttribute("aria-pressed", String(selected));
+    // Character cards
+    document.querySelectorAll(".character-card").forEach((card) => {
+        card.classList.toggle("is-selected", state.selectedRole === card.dataset.role);
     });
 
-    // Stage 3: consent buttons
+    // Stage 2: consent (consumer)
     document.querySelectorAll("[data-consent]").forEach((button) => {
         button.classList.toggle("is-selected", state.consentChoice === button.dataset.consent);
     });
-
     document.querySelectorAll("[data-consent-understanding]").forEach((button) => {
         button.classList.toggle("is-selected", state.consentUnderstanding === button.dataset.consentUnderstanding);
     });
-
-    // Stage 3: confidence buttons
     document.querySelectorAll(".confidence-btn").forEach((button) => {
         button.classList.toggle("is-selected", state.confidenceRating === button.dataset.confidence);
     });
 
-    // Stage 4: bankruptcy buttons
-    document.querySelectorAll("[data-bankruptcy-choice]").forEach((button) => {
-        button.classList.toggle("is-selected", state.bankruptcyChoice === button.dataset.bankruptcyChoice);
+    // Stage 3: data cards
+    document.querySelectorAll(".data-card").forEach((card) => {
+        const selected = state.selectedDataTypes.includes(card.dataset.dataType);
+        card.classList.toggle("is-selected", selected);
+        card.setAttribute("aria-pressed", String(selected));
+    });
+
+    // Stage 4: dilemma choice buttons
+    document.querySelectorAll("[data-dilemma-choice]").forEach((button) => {
+        button.classList.toggle("is-selected", state.dilemmaChoice === button.dataset.dilemmaChoice);
     });
 
     // Stage 5: twist answer buttons
@@ -192,41 +479,13 @@ function syncSelectionStates() {
         button.classList.toggle("is-selected", selected);
     });
 
-    // Stage 5: obligation buttons
-    document.querySelectorAll(".obligation-btn").forEach((button) => {
-        const selected = state.selectedObligations.includes(button.dataset.obligation);
-        button.classList.toggle("is-selected", selected);
-        button.setAttribute("aria-pressed", String(selected));
-    });
-
     // Stage 6: owner buttons
     document.querySelectorAll(".owner-btn").forEach((button) => {
         button.classList.toggle("is-selected", state.ownerChoice === button.dataset.owner);
     });
-
-    // Stage 7: commitment buttons
-    document.querySelectorAll(".commitment-btn").forEach((button) => {
-        const selected = state.selectedCommitments.includes(button.dataset.commitment);
-        button.classList.toggle("is-selected", selected);
-        button.setAttribute("aria-pressed", String(selected));
-    });
-
-    // Stage 8: principle cards
-    document.querySelectorAll(".principle-card").forEach((button) => {
-        const selected = state.selectedPrinciples.includes(button.dataset.principle);
-        button.classList.toggle("is-selected", selected);
-        button.setAttribute("aria-pressed", String(selected));
-    });
-
-    // Stage 9: reflection buttons
-    document.querySelectorAll("[data-reflection-cat]").forEach((button) => {
-        const cat = button.dataset.reflectionCat;
-        const ans = button.dataset.reflectionAns;
-        button.classList.toggle("is-selected", state.reflections[cat] === ans);
-    });
 }
 
-// ── Consent Timer ────────────────────────────────────────────────────────────
+// ── Timer Logic ──────────────────────────────────────────────────────────────
 
 function clearConsentTimer() {
     if (state.consentTimerId) {
@@ -257,12 +516,121 @@ function startConsentTimer() {
     }, 1000);
 }
 
-// ── Twist Display ────────────────────────────────────────────────────────────
+// ── Setup Stages by Role ─────────────────────────────────────────────────────
+
+function setupStage2Context() {
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    contextEyebrowEl.textContent = role.context.eyebrow;
+    contextTitleEl.textContent = role.context.title;
+    contextLeadEl.textContent = role.context.lead;
+
+    if (role.context.stats && role.context.stats.length) {
+        contextStatsEl.innerHTML = role.context.stats
+            .map(s => `<div class="stat-card"><span class="stat-val">${s.value}</span><span class="stat-lbl">${s.label}</span></div>`)
+            .join("");
+        contextStatsEl.classList.remove("hidden");
+    } else {
+        contextStatsEl.classList.add("hidden");
+        contextStatsEl.innerHTML = "";
+    }
+
+    contextBodyEl.innerHTML = role.context.bodyHtml || "";
+
+    if (role.context.showPolicy) {
+        policySectionEl.classList.remove("hidden");
+        contextContinueBtnEl.classList.add("hidden");
+        if (!state.consentChoice) {
+            consentRevealEl.classList.add("hidden");
+            confidenceSectionEl.classList.add("hidden");
+            startConsentTimer();
+        } else {
+            clearConsentTimer();
+            consentRevealEl.classList.remove("hidden");
+            if (state.consentUnderstanding) {
+                confidenceSectionEl.classList.remove("hidden");
+            }
+        }
+    } else {
+        policySectionEl.classList.add("hidden");
+        contextContinueBtnEl.classList.remove("hidden");
+        clearConsentTimer();
+    }
+}
+
+function setupStage3Data() {
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    dataEyebrowEl.textContent = role.dataPrompt.eyebrow;
+    dataTitleEl.textContent = role.dataPrompt.title;
+    dataPromptEl.textContent = role.dataPrompt.prompt;
+    dataDiscussionTextEl.textContent = role.dataPrompt.discussion;
+    dataDiscussionNoteEl.textContent = role.dataPrompt.note;
+}
+
+function setupStage4Dilemma() {
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    dilemmaEyebrowEl.textContent = role.dilemma.eyebrow;
+    dilemmaTitleEl.textContent = role.dilemma.title;
+    dilemmaHeadlineEl.textContent = role.dilemma.headline;
+    dilemmaPromptEl.textContent = role.dilemma.prompt;
+
+    dilemmaChoicesEl.innerHTML = role.dilemma.choices
+        .map(c => `
+            <button class="choice-btn dilemma-choice-card" data-dilemma-choice="${c.id}">
+                <span class="dilemma-card-label">${c.label}</span>
+                <span class="dilemma-card-desc">${c.desc}</span>
+            </button>
+        `)
+        .join("");
+
+    if (state.dilemmaChoice) {
+        renderDilemmaTradeoffs(state.dilemmaChoice);
+    } else {
+        dilemmaSummaryEl.classList.add("hidden");
+        dilemmaTradeoffPanelEl.classList.add("hidden");
+        dilemmaDiscussionEl.classList.add("hidden");
+        dilemmaContinueBtnEl.classList.add("hidden");
+    }
+}
+
+function renderDilemmaTradeoffs(choiceId) {
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    const choiceObj = role.dilemma.choices.find(c => c.id === choiceId);
+    if (!choiceObj) return;
+
+    dilemmaSummaryEl.textContent = `YOUR DECISION: ${choiceObj.label}`;
+    dilemmaSummaryEl.classList.remove("hidden");
+
+    const items = role.dilemma.tradeoffs[choiceId] || [];
+    const levelLabels = { positive: "Positive", mixed: "Mixed", negative: "Negative" };
+
+    dilemmaTradeoffGridEl.innerHTML = items
+        .map(
+            (item) => `
+        <div class="tradeoff-item tradeoff-${item.level}">
+            <span class="tradeoff-indicator tradeoff-dot-${item.level}" aria-hidden="true"></span>
+            <span class="tradeoff-dimension">${item.dimension}</span>
+            <span class="tradeoff-level-label">${levelLabels[item.level]}</span>
+        </div>`
+        )
+        .join("");
+
+    dilemmaTradeoffPanelEl.classList.remove("hidden");
+    dilemmaDiscussionTextEl.textContent = role.dilemma.discussion;
+    dilemmaDiscussionEl.classList.remove("hidden");
+    dilemmaContinueBtnEl.classList.remove("hidden");
+}
 
 function updateTwistDisplay() {
-    const twist = twistDeck[state.twistIndex] || twistDeck[0];
-    const currentNumber = Math.min(state.twistIndex + 1, twistDeck.length);
-    twistIndexTextEl.textContent = `TWIST ${String(currentNumber).padStart(2, "0")}`;
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    const twists = role.twists || [];
+    const twist = twists[state.twistIndex] || twists[0];
+
+    twistIndexTextEl.textContent = `TWIST 0${Math.min(state.twistIndex + 1, twists.length)}`;
     twistTitleEl.textContent = twist.title;
     twistQuestionEl.textContent = twist.question;
 
@@ -280,508 +648,206 @@ function updateTwistDisplay() {
         twistSummaryEl.classList.add("hidden");
     }
 
-    // Show CONTINUE button only after last twist is answered
-    const isLastTwist = state.twistIndex === twistDeck.length - 1;
-    const hasAnsweredLastTwist = state.twistAnswers[state.twistIndex];
-    const revealBtn = document.getElementById("reveal-next-twist");
-    const continueBtn = document.getElementById("continue-after-twists");
+    const isLastTwist = state.twistIndex === twists.length - 1;
+    const hasAnsweredLastTwist = !!state.twistAnswers[state.twistIndex];
 
     if (isLastTwist && hasAnsweredLastTwist) {
-        revealBtn.classList.add("hidden");
-        continueBtn.classList.remove("hidden");
+        revealTwistBtnEl.classList.add("hidden");
+        continueAfterTwistsBtnEl.classList.remove("hidden");
     } else {
-        revealBtn.classList.remove("hidden");
-        continueBtn.classList.add("hidden");
+        revealTwistBtnEl.classList.remove("hidden");
+        continueAfterTwistsBtnEl.classList.add("hidden");
     }
 }
 
 function revealNextTwist() {
-    if (state.twistIndex < twistDeck.length - 1) {
+    if (!state.selectedRole) return;
+    const twists = roleProfiles[state.selectedRole].twists || [];
+    if (state.twistIndex < twists.length - 1) {
         state.twistIndex += 1;
         updateTwistDisplay();
+        syncSelectionStates();
     }
 }
 
-// ── Stage 4: Bankruptcy Choice & Tradeoffs ───────────────────────────────────
+function setupStage6Ownership() {
+    if (!state.selectedRole) return;
+    const role = roleProfiles[state.selectedRole];
+    ownerRoleQuestionEl.textContent = role.ownerQuestion;
 
-function setBankruptcyChoice(choice) {
-    const labels = {
-        sell: "You chose to SELL the data.",
-        "sell-conditions": "You chose to SELL WITH CONDITIONS.",
-        refuse: "You chose to REFUSE the sale.",
-    };
-    bankruptcySummaryEl.textContent = labels[choice];
-    bankruptcySummaryEl.classList.remove("hidden");
-}
-
-function showTradeoffs(choice) {
-    const panel = document.getElementById("tradeoff-panel");
-    const grid = document.getElementById("tradeoff-grid");
-    const items = tradeoffProfiles[choice];
-
-    if (!items) return;
-
-    const levelLabels = { positive: "Positive", mixed: "Mixed", negative: "Negative" };
-
-    grid.innerHTML = items
-        .map(
-            (item) => `
-        <div class="tradeoff-item tradeoff-${item.level}">
-            <span class="tradeoff-indicator tradeoff-dot-${item.level}" aria-hidden="true"></span>
-            <span class="tradeoff-dimension">${item.dimension}</span>
-            <span class="tradeoff-level-label">${levelLabels[item.level]}</span>
-        </div>`
-        )
-        .join("");
-
-    panel.classList.remove("hidden");
-}
-
-// ── Stage 6: Owner Choice ────────────────────────────────────────────────────
-
-function setOwnerChoice(choice) {
-    ownerSummaryEl.textContent = `Current position: ${choice}`;
-    ownerSummaryEl.classList.remove("hidden");
-}
-
-// ── Stage 7: Commitments ─────────────────────────────────────────────────────
-
-function updateCommitmentsCount() {
-    const countEl = document.getElementById("commitments-count");
-    countEl.textContent = `${state.selectedCommitments.length} of 9 commitments selected`;
-
-    const reflectionEl = document.getElementById("commitments-reflection");
-    if (state.selectedCommitments.length > 0) {
-        reflectionEl.classList.remove("hidden");
+    if (state.ownerChoice) {
+        ownerSummaryEl.textContent = `Selected Position: ${state.ownerChoice}`;
+        ownerSummaryEl.classList.remove("hidden");
     } else {
-        reflectionEl.classList.add("hidden");
+        ownerSummaryEl.classList.add("hidden");
     }
 }
 
-// ── Stage 8: Principles, Ranking & Constitution ──────────────────────────────
+function setupStage7Reflection() {
+    if (!state.selectedRole) return;
+    const currentRole = roleProfiles[state.selectedRole];
 
-function updatePrincipleSelection(button) {
-    const principle = button.dataset.principle;
-    const isSelected = button.classList.contains("is-selected");
+    document.getElementById("recap-role-name").textContent = `${currentRole.icon} ${currentRole.name}`;
 
-    if (isSelected) {
-        // Deselecting — also clear ranking
-        state.selectedPrinciples = state.selectedPrinciples.filter((item) => item !== principle);
-        button.classList.remove("is-selected");
-        button.setAttribute("aria-pressed", "false");
-        state.principleRanking = [];
-        document.getElementById("ranking-section").classList.add("hidden");
-        document.getElementById("constitution-card").classList.add("hidden");
-        document.getElementById("sacrifice-prompt").classList.add("hidden");
-        document.getElementById("stage8-continue").classList.add("hidden");
+    // 1. Recap of this playthrough
+    const recapEl = document.getElementById("decisions-recap");
+    const dataStr = state.selectedDataTypes.length ? state.selectedDataTypes.join(", ") : "None chosen";
+    const choiceObj = currentRole.dilemma.choices.find(c => c.id === state.dilemmaChoice);
+    const dilemmaStr = choiceObj ? choiceObj.label : "No choice made";
+    const ownerStr = state.ownerChoice || "No position chosen";
 
-        principleLimitNoteEl.textContent =
-            state.selectedPrinciples.length === 0
-                ? "Choose up to three."
-                : `${state.selectedPrinciples.length} of 3 selected.`;
-        principleLimitNoteEl.style.color = "var(--muted)";
-        return;
-    }
-
-    if (state.selectedPrinciples.length >= 3) {
-        principleLimitNoteEl.textContent = "Deselect a principle before choosing another.";
-        principleLimitNoteEl.style.color = "var(--red)";
-        button.animate(
-            [
-                { transform: "translateX(0)" },
-                { transform: "translateX(-4px)" },
-                { transform: "translateX(4px)" },
-                { transform: "translateX(0)" },
-            ],
-            { duration: 200 }
-        );
-        return;
-    }
-
-    // Select
-    state.selectedPrinciples.push(principle);
-    button.classList.add("is-selected");
-    button.setAttribute("aria-pressed", "true");
-
-    if (state.selectedPrinciples.length < 3) {
-        principleLimitNoteEl.textContent = `${state.selectedPrinciples.length} of 3 selected.`;
-        principleLimitNoteEl.style.color = "var(--muted)";
-    } else {
-        principleLimitNoteEl.textContent = "Now rank your three principles below.";
-        principleLimitNoteEl.style.color = "var(--blue)";
-        showRankingSection();
-    }
-}
-
-function showRankingSection() {
-    const section = document.getElementById("ranking-section");
-    const optionsContainer = document.getElementById("rank-options");
-
-    // Populate rank options with selected principles
-    optionsContainer.innerHTML = state.selectedPrinciples
-        .map(
-            (p) =>
-                `<button class="rank-option-btn" data-rank-principle="${p}" aria-label="Assign rank to ${p}">${p}</button>`
-        )
-        .join("");
-
-    // If ranking was already started, restore it
-    updateRankDisplay();
-    section.classList.remove("hidden");
-
-    // Smooth scroll to ranking section
-    setTimeout(() => {
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
-}
-
-function updateRankDisplay() {
-    // Update slot displays
-    for (let i = 0; i < 3; i++) {
-        const valueEl = document.getElementById(`rank-value-${i}`);
-        const slot = valueEl.closest(".rank-slot");
-        if (state.principleRanking[i]) {
-            valueEl.textContent = state.principleRanking[i];
-            slot.classList.add("filled");
-            slot.setAttribute("aria-label", `Priority ${i + 1}: ${state.principleRanking[i]}. Click to remove.`);
-        } else {
-            valueEl.textContent = "—";
-            slot.classList.remove("filled");
-            slot.setAttribute("aria-label", `Priority ${i + 1}, empty`);
-        }
-    }
-
-    // Update option buttons
-    document.querySelectorAll(".rank-option-btn").forEach((btn) => {
-        const principle = btn.dataset.rankPrinciple;
-        const isRanked = state.principleRanking.includes(principle);
-        btn.classList.toggle("is-ranked", isRanked);
-        btn.disabled = isRanked;
-    });
-
-    // Show constitution if all 3 ranked
-    if (state.principleRanking.length === 3) {
-        renderConstitutionCard();
-    } else {
-        document.getElementById("constitution-card").classList.add("hidden");
-        document.getElementById("sacrifice-prompt").classList.add("hidden");
-        document.getElementById("stage8-continue").classList.add("hidden");
-    }
-}
-
-function renderConstitutionCard() {
-    const card = document.getElementById("constitution-card");
-    const articles = document.getElementById("constitution-articles");
-
-    const romanNumerals = ["I", "II", "III"];
-    const rankLabels = ["Our highest commitment", "Our core value", "Our guiding principle"];
-
-    articles.innerHTML = state.principleRanking
-        .map((principle, i) => {
-            const desc = principleDescriptions[principle] || "";
-            return `
-            <div class="constitution-article">
-                <div class="article-header">
-                    <span class="article-numeral">ARTICLE ${romanNumerals[i]}</span>
-                    <span class="article-rank">${rankLabels[i]}</span>
-                </div>
-                <h4 class="article-title">${principle}</h4>
-                <p class="article-text">${desc}</p>
-            </div>`;
-        })
-        .join("");
-
-    document.getElementById("constitution-date").textContent = new Date().toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
-    card.classList.remove("hidden");
-    document.getElementById("sacrifice-prompt").classList.remove("hidden");
-    document.getElementById("stage8-continue").classList.remove("hidden");
-
-    setTimeout(() => {
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 100);
-}
-
-// ── Stage 9: Decisions Recap ─────────────────────────────────────────────────
-
-function generateDecisionsRecap() {
-    const recap = document.getElementById("decisions-recap");
-
-    const dataStr = state.soldData.length ? state.soldData.join(", ") : "None selected";
-
-    const consentLabels = { agree: "Agreed", decline: "Declined" };
-    const consentStr = state.consentChoice ? consentLabels[state.consentChoice] : "No choice made";
-
-    const confidenceLabels = {
-        "1": "Not at all",
-        "2": "Slightly",
-        "3": "Somewhat",
-        "4": "Mostly",
-        "5": "Completely",
-    };
-    const confStr = state.confidenceRating ? confidenceLabels[state.confidenceRating] : "Not rated";
-
-    const bankLabels = { sell: "Sell", "sell-conditions": "Sell with conditions", refuse: "Refuse" };
-    const bankStr = state.bankruptcyChoice ? bankLabels[state.bankruptcyChoice] : "No choice made";
-
-    const ownerStr = state.ownerChoice || "No choice made";
-
-    const commitStr = state.selectedCommitments.length
-        ? `${state.selectedCommitments.length} commitment${state.selectedCommitments.length > 1 ? "s" : ""}`
-        : "None selected";
-
-    const constStr = state.principleRanking.length === 3 ? state.principleRanking.join(" → ") : "Not completed";
-
-    recap.innerHTML = `
-        <h3>YOUR DECISIONS</h3>
-        <div class="recap-grid">
+    let roleSpecificItemHtml = "";
+    if (state.selectedRole === "consumer") {
+        const consentLabels = { agree: "Agreed without reading", decline: "Declined" };
+        const consentStr = state.consentChoice ? consentLabels[state.consentChoice] : "N/A";
+        roleSpecificItemHtml = `
             <div class="recap-item">
-                <span class="recap-label">Data you'd sell</span>
-                <span class="recap-value">${dataStr}</span>
-            </div>
-            <div class="recap-item">
-                <span class="recap-label">Privacy policy</span>
+                <span class="recap-label">Terms & Privacy Acceptance</span>
                 <span class="recap-value">${consentStr}</span>
             </div>
+        `;
+    }
+
+    recapEl.innerHTML = `
+        <h3>YOUR PATH SUMMARY</h3>
+        <div class="recap-grid">
             <div class="recap-item">
-                <span class="recap-label">User understanding</span>
-                <span class="recap-value">${confStr}</span>
+                <span class="recap-label">Role Played</span>
+                <span class="recap-value">${currentRole.icon} ${currentRole.name}</span>
             </div>
+            ${roleSpecificItemHtml}
             <div class="recap-item">
-                <span class="recap-label">Bankruptcy decision</span>
-                <span class="recap-value">${bankStr}</span>
-            </div>
-            <div class="recap-item">
-                <span class="recap-label">Data ownership</span>
-                <span class="recap-value">${ownerStr}</span>
-            </div>
-            <div class="recap-item">
-                <span class="recap-label">Research commitments</span>
-                <span class="recap-value">${commitStr}</span>
+                <span class="recap-label">Data Types Selected</span>
+                <span class="recap-value">${dataStr}</span>
             </div>
             <div class="recap-item recap-item-wide">
-                <span class="recap-label">Constitution</span>
-                <span class="recap-value">${constStr}</span>
+                <span class="recap-label">Core Crisis Decision</span>
+                <span class="recap-value">${dilemmaStr}</span>
             </div>
-        </div>`;
+            <div class="recap-item">
+                <span class="recap-label">Data Ownership Stance</span>
+                <span class="recap-value">${ownerStr}</span>
+            </div>
+        </div>
+    `;
+
+    // 2. Role Swap Preview
+    const roleSwapGridEl = document.getElementById("role-swap-grid");
+    const otherRoles = Object.values(roleProfiles).filter(r => r.id !== state.selectedRole);
+
+    roleSwapGridEl.innerHTML = otherRoles
+        .map(r => `
+            <div class="role-swap-card">
+                <span class="swap-icon">${r.icon}</span>
+                <h4>${r.name}</h4>
+                <p class="swap-question"><strong>Their Dilemma:</strong> ${r.dilemma.title}</p>
+                <p class="swap-reflection"><em>"Would you make the same ethical choices if you held their stakes?"</em></p>
+            </div>
+        `)
+        .join("");
+
+    // 3. Synthesis questions
+    const synthesisListEl = document.getElementById("synthesis-list");
+    synthesisListEl.innerHTML = `
+        <div class="synthesis-item">
+            <span class="synthesis-number">1</span>
+            <p><strong>Consent Asymmetry:</strong> Can users give genuine informed consent to future corporate transactions when agreeing to terms years earlier?</p>
+        </div>
+        <div class="synthesis-item">
+            <span class="synthesis-number">2</span>
+            <p><strong>Shared Genetic Harm:</strong> Genetic data inherently reveals biological relatives. Can one person ethically sell or surrender data that identifies their family?</p>
+        </div>
+        <div class="synthesis-item">
+            <span class="synthesis-number">3</span>
+            <p><strong>Corporate Insolvency vs Human Rights:</strong> In bankruptcy, should sensitive biometric data be protected by human rights safeguards, or treated as standard liquidation inventory?</p>
+        </div>
+        <div class="synthesis-item">
+            <span class="synthesis-number">4</span>
+            <p><strong>Individual Costs of Ethics:</strong> Why do systems often force lower-level workers (like data scientists with debt) to bear the personal cost of blowing the whistle?</p>
+        </div>
+    `;
 }
 
-// ── Restart ──────────────────────────────────────────────────────────────────
-
-function restartSimulation() {
-    // Reset all state
-    state.currentStage = 0;
-    state.soldData = [];
-    state.consentChoice = null;
-    state.consentUnderstanding = null;
-    state.confidenceRating = null;
-    state.bankruptcyChoice = null;
-    state.twistIndex = 0;
-    state.twistAnswers = [];
-    state.obligationsShown = false;
-    state.selectedObligations = [];
-    state.ownerChoice = null;
-    state.selectedCommitments = [];
-    state.selectedPrinciples = [];
-    state.principleRanking = [];
-    state.reflections = { own: null, family: null, public: null };
-    state.textResponses = {};
-    state.consentTimerSeconds = 30;
-
-    clearConsentTimer();
-
-    // Clear all selected classes
-    document.querySelectorAll(".data-card, .choice-btn, .owner-btn, .principle-card, .commitment-btn, .obligation-btn, .confidence-btn")
-        .forEach((el) => {
-            el.classList.remove("is-selected");
-            if (el.hasAttribute("aria-pressed")) {
-                el.setAttribute("aria-pressed", "false");
-            }
-        });
-
-    // Hide all reveal/dynamic panels
-    consentRevealEl.classList.add("hidden");
-    document.getElementById("confidence-section").classList.add("hidden");
-    bankruptcySummaryEl.classList.add("hidden");
-    document.getElementById("tradeoff-panel").classList.add("hidden");
-    twistSummaryEl.classList.add("hidden");
-    document.getElementById("obligations-section").classList.add("hidden");
-    document.getElementById("continue-after-twists").classList.add("hidden");
-    ownerSummaryEl.classList.add("hidden");
-    document.getElementById("commitments-reflection").classList.add("hidden");
-    document.getElementById("ranking-section").classList.add("hidden");
-    document.getElementById("constitution-card").classList.add("hidden");
-    document.getElementById("sacrifice-prompt").classList.add("hidden");
-    document.getElementById("stage8-continue").classList.add("hidden");
-
-    principleLimitNoteEl.textContent = "Choose up to three.";
-    principleLimitNoteEl.style.color = "var(--muted)";
-
-    // Reset commitment count
-    document.getElementById("commitments-count").textContent = "0 of 9 commitments selected";
-
-    // Clear textareas
-    document.querySelectorAll("textarea").forEach((ta) => {
-        ta.value = "";
-    });
-
-    // Clear decisions recap
-    document.getElementById("decisions-recap").innerHTML = "";
-
-    updateTwistDisplay();
-    showScreen(0);
-}
-
-// ── Stage-Specific UI Sync (called on every stage change) ────────────────────
+// ── Master UI Sync ───────────────────────────────────────────────────────────
 
 function syncStageSpecificUI() {
+    updateRoleBadge();
     syncSelectionStates();
 
-    // Stage 3: consent + timer
-    if (state.currentStage === 2) {
-        if (!state.consentChoice) {
-            // Fresh visit — start timer
-            consentRevealEl.classList.add("hidden");
-            document.getElementById("confidence-section").classList.add("hidden");
-            startConsentTimer();
-        } else {
-            // Revisiting — restore state, don't restart timer
-            clearConsentTimer();
-            consentRevealEl.classList.remove("hidden");
-            if (state.consentUnderstanding) {
-                document.getElementById("confidence-section").classList.remove("hidden");
-            }
-        }
+    if (state.currentStage === 1) { // Stage 2 Context
+        setupStage2Context();
     } else {
         clearConsentTimer();
     }
 
-    // Stage 4: bankruptcy + tradeoffs
-    if (state.currentStage === 3) {
-        if (state.bankruptcyChoice) {
-            setBankruptcyChoice(state.bankruptcyChoice);
-            showTradeoffs(state.bankruptcyChoice);
-        } else {
-            bankruptcySummaryEl.classList.add("hidden");
-            document.getElementById("tradeoff-panel").classList.add("hidden");
-        }
-    } else if (state.currentStage !== 3) {
-        bankruptcySummaryEl.classList.add("hidden");
-        document.getElementById("tradeoff-panel").classList.add("hidden");
+    if (state.currentStage === 2) { // Stage 3 Data Selection
+        setupStage3Data();
     }
 
-    // Stage 5: twists + obligations
-    if (state.currentStage === 4) {
+    if (state.currentStage === 3) { // Stage 4 Dilemma
+        setupStage4Dilemma();
+    }
+
+    if (state.currentStage === 4) { // Stage 5 Twists
         updateTwistDisplay();
-        if (state.obligationsShown) {
-            document.getElementById("obligations-section").classList.remove("hidden");
-            document.getElementById("continue-after-twists").classList.add("hidden");
-        } else {
-            document.getElementById("obligations-section").classList.add("hidden");
-        }
     }
 
-    // Stage 6: owner
-    if (state.currentStage === 5 && state.ownerChoice) {
-        setOwnerChoice(state.ownerChoice);
-    } else if (state.currentStage !== 5) {
-        ownerSummaryEl.classList.add("hidden");
+    if (state.currentStage === 5) { // Stage 6 Ownership
+        setupStage6Ownership();
     }
 
-    // Stage 7: commitments
-    if (state.currentStage === 6) {
-        updateCommitmentsCount();
-    }
-
-    // Stage 8: principles + ranking + constitution
-    if (state.currentStage === 7) {
-        if (state.selectedPrinciples.length === 3) {
-            showRankingSection();
-            if (state.principleRanking.length === 3) {
-                renderConstitutionCard();
-            }
-        } else {
-            document.getElementById("ranking-section").classList.add("hidden");
-            document.getElementById("constitution-card").classList.add("hidden");
-            document.getElementById("sacrifice-prompt").classList.add("hidden");
-            document.getElementById("stage8-continue").classList.add("hidden");
-        }
-    }
-
-    // Stage 9: recap
-    if (state.currentStage === 8) {
-        generateDecisionsRecap();
-        // Restore textarea values from state
-        Object.keys(state.textResponses).forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) el.value = state.textResponses[id];
-        });
+    if (state.currentStage === 6) { // Stage 7 Reflection
+        setupStage7Reflection();
     }
 }
 
-// ── Data Card Selection (Stage 2) ────────────────────────────────────────────
+// ── Restart Simulation ───────────────────────────────────────────────────────
 
-function selectDataCard(card) {
-    const type = card.dataset.dataType;
-    if (state.soldData.includes(type)) {
-        state.soldData = state.soldData.filter((item) => item !== type);
-    } else {
-        state.soldData.push(type);
-    }
+function restartSimulation() {
+    state.selectedRole = null;
+    state.currentStage = 0;
+    state.consentChoice = null;
+    state.consentUnderstanding = null;
+    state.confidenceRating = null;
+    state.selectedDataTypes = [];
+    state.dilemmaChoice = null;
+    state.twistIndex = 0;
+    state.twistAnswers = [];
+    state.ownerChoice = null;
+    state.consentTimerSeconds = 30;
+
+    clearConsentTimer();
     syncSelectionStates();
+    showScreen(0);
 }
 
 // ── Click Event Delegation ───────────────────────────────────────────────────
 
 document.addEventListener("click", (event) => {
-    // ── Restart (check before data-next) ──
-    const restartBtn = event.target.closest("#restart-btn");
-    if (restartBtn) {
+    // ── Restart ──
+    if (event.target.closest("#restart-btn")) {
         restartSimulation();
         return;
     }
 
-    // ── Continue after twists → show obligations (check before data-next) ──
-    const continueAfterTwistsBtn = event.target.closest("#continue-after-twists");
-    if (continueAfterTwistsBtn) {
-        state.obligationsShown = true;
-        document.getElementById("obligations-section").classList.remove("hidden");
-        continueAfterTwistsBtn.classList.add("hidden");
-        setTimeout(() => {
-            document.getElementById("obligations-section").scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }, 50);
-        return;
-    }
-
-    // ── Reveal next twist ──
-    const revealTwistBtn = event.target.closest("#reveal-next-twist");
-    if (revealTwistBtn) {
-        revealNextTwist();
-        return;
-    }
-
-    // ── Generic data-next navigation ──
-    const nextTrigger = event.target.closest("[data-next]");
-    if (nextTrigger) {
+    // ── Character Selection (Stage 1) ──
+    const charCard = event.target.closest(".character-card");
+    if (charCard && state.currentStage === 0) {
+        state.selectedRole = charCard.dataset.role;
+        syncSelectionStates();
+        // Advance to stage 2 automatically
         goToNext();
         return;
     }
 
-    // ── Stage 2: data cards ──
-    const dataCard = event.target.closest(".data-card");
-    if (dataCard) {
-        selectDataCard(dataCard);
+    // ── Generic Next Trigger ──
+    const nextBtn = event.target.closest("[data-next]");
+    if (nextBtn) {
+        goToNext();
         return;
     }
 
-    // ── Stage 3: consent ──
+    // ── Stage 2: Consent buttons ──
     const consentBtn = event.target.closest("[data-consent]");
     if (consentBtn) {
         state.consentChoice = consentBtn.dataset.consent;
@@ -791,205 +857,96 @@ document.addEventListener("click", (event) => {
         return;
     }
 
-    // ── Stage 3: consent understanding ──
-    const understandingBtn = event.target.closest("[data-consent-understanding]");
-    if (understandingBtn) {
-        state.consentUnderstanding = understandingBtn.dataset.consentUnderstanding;
-        document.getElementById("confidence-section").classList.remove("hidden");
+    // ── Stage 2: Consent understanding ──
+    const understandBtn = event.target.closest("[data-consent-understanding]");
+    if (understandBtn) {
+        state.consentUnderstanding = understandBtn.dataset.consentUnderstanding;
+        confidenceSectionEl.classList.remove("hidden");
         syncSelectionStates();
         return;
     }
 
-    // ── Stage 3: confidence rating ──
-    const confidenceBtn = event.target.closest(".confidence-btn");
-    if (confidenceBtn) {
-        state.confidenceRating = confidenceBtn.dataset.confidence;
+    // ── Stage 2: Confidence rating ──
+    const confBtn = event.target.closest(".confidence-btn");
+    if (confBtn) {
+        state.confidenceRating = confBtn.dataset.confidence;
         syncSelectionStates();
         return;
     }
 
-    // ── Stage 4: bankruptcy choice ──
-    const bankruptcyBtn = event.target.closest("[data-bankruptcy-choice]");
-    if (bankruptcyBtn) {
-        const choice = bankruptcyBtn.dataset.bankruptcyChoice;
-        state.bankruptcyChoice = choice;
-        setBankruptcyChoice(choice);
-        showTradeoffs(choice);
+    // ── Stage 3: Data cards ──
+    const dataCard = event.target.closest(".data-card");
+    if (dataCard) {
+        const type = dataCard.dataset.dataType;
+        if (state.selectedDataTypes.includes(type)) {
+            state.selectedDataTypes = state.selectedDataTypes.filter(d => d !== type);
+        } else {
+            state.selectedDataTypes.push(type);
+        }
         syncSelectionStates();
         return;
     }
 
-    // ── Stage 5: twist answer ──
-    const twistAnswerBtn = event.target.closest("[data-twist-answer]");
-    if (twistAnswerBtn) {
-        const answer = twistAnswerBtn.dataset.twistAnswer;
-        state.twistAnswers[state.twistIndex] = answer;
-        const label = answer.toUpperCase();
-        twistSummaryEl.textContent = `Twist ${state.twistIndex + 1}: ${label}`;
-        twistSummaryEl.classList.remove("hidden");
+    // ── Stage 4: Dilemma choices ──
+    const dilemmaBtn = event.target.closest("[data-dilemma-choice]");
+    if (dilemmaBtn) {
+        const choice = dilemmaBtn.dataset.dilemmaChoice;
+        state.dilemmaChoice = choice;
+        renderDilemmaTradeoffs(choice);
+        syncSelectionStates();
+        return;
+    }
+
+    // ── Stage 5: Twist answers ──
+    const twistAnsBtn = event.target.closest("[data-twist-answer]");
+    if (twistAnsBtn) {
+        const ans = twistAnsBtn.dataset.twistAnswer;
+        state.twistAnswers[state.twistIndex] = ans;
         updateTwistDisplay();
         syncSelectionStates();
         return;
     }
 
-    // ── Stage 5: obligation toggle ──
-    const obligationBtn = event.target.closest(".obligation-btn");
-    if (obligationBtn) {
-        const obligation = obligationBtn.dataset.obligation;
-        if (state.selectedObligations.includes(obligation)) {
-            state.selectedObligations = state.selectedObligations.filter((o) => o !== obligation);
-        } else {
-            state.selectedObligations.push(obligation);
-        }
-        syncSelectionStates();
+    // ── Stage 5: Reveal next twist ──
+    if (event.target.closest("#reveal-next-twist")) {
+        revealNextTwist();
         return;
     }
 
-    // ── Stage 6: owner ──
+    // ── Stage 6: Owner selection ──
     const ownerBtn = event.target.closest(".owner-btn");
     if (ownerBtn) {
         state.ownerChoice = ownerBtn.dataset.owner;
-        setOwnerChoice(state.ownerChoice);
+        ownerSummaryEl.textContent = `Selected Position: ${state.ownerChoice}`;
+        ownerSummaryEl.classList.remove("hidden");
         syncSelectionStates();
         return;
-    }
-
-    // ── Stage 7: commitment toggle ──
-    const commitmentBtn = event.target.closest(".commitment-btn");
-    if (commitmentBtn) {
-        const commitment = commitmentBtn.dataset.commitment;
-        if (state.selectedCommitments.includes(commitment)) {
-            state.selectedCommitments = state.selectedCommitments.filter((c) => c !== commitment);
-        } else {
-            state.selectedCommitments.push(commitment);
-        }
-        updateCommitmentsCount();
-        syncSelectionStates();
-        return;
-    }
-
-    // ── Stage 8: principle selection ──
-    const principleCard = event.target.closest(".principle-card");
-    if (principleCard) {
-        updatePrincipleSelection(principleCard);
-        return;
-    }
-
-    // ── Stage 8: rank option click (assign rank) ──
-    const rankOptionBtn = event.target.closest(".rank-option-btn");
-    if (rankOptionBtn && !rankOptionBtn.disabled) {
-        const principle = rankOptionBtn.dataset.rankPrinciple;
-        if (state.principleRanking.length < 3 && !state.principleRanking.includes(principle)) {
-            state.principleRanking.push(principle);
-            updateRankDisplay();
-        }
-        return;
-    }
-
-    // ── Stage 8: rank slot click (remove rank) ──
-    const rankSlot = event.target.closest(".rank-slot.filled");
-    if (rankSlot) {
-        const rankIndex = parseInt(rankSlot.dataset.rank);
-        // Remove this rank and everything after it (so ranks stay contiguous)
-        state.principleRanking = state.principleRanking.slice(0, rankIndex);
-        updateRankDisplay();
-        return;
-    }
-
-    // ── Stage 9: reflection buttons ──
-    const reflectionBtn = event.target.closest("[data-reflection-cat]");
-    if (reflectionBtn) {
-        const cat = reflectionBtn.dataset.reflectionCat;
-        const ans = reflectionBtn.dataset.reflectionAns;
-        state.reflections[cat] = ans;
-        syncSelectionStates();
-        return;
-    }
-});
-
-// ── Textarea Persistence ─────────────────────────────────────────────────────
-
-document.addEventListener("input", (event) => {
-    if (event.target.tagName === "TEXTAREA") {
-        state.textResponses[event.target.id] = event.target.value;
     }
 });
 
 // ── Keyboard Shortcuts ───────────────────────────────────────────────────────
 
 document.addEventListener("keydown", (event) => {
-    const isTypingField = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName || "");
-    if (isTypingField) {
-        return;
-    }
+    const isTyping = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName || "");
+    if (isTyping) return;
 
     if (event.key === "ArrowRight" || event.code === "Space") {
         event.preventDefault();
         goToNext();
         return;
     }
-
     if (event.key === "ArrowLeft") {
         event.preventDefault();
         goToPrevious();
         return;
     }
-
     if (event.key.toLowerCase() === "r") {
         event.preventDefault();
         restartSimulation();
         return;
     }
-
-    if (["1", "2", "3", "4", "5"].includes(event.key)) {
-        const key = Number(event.key);
-
-        // Stage 3 (index 2): consent buttons (1-2) or confidence buttons (1-5)
-        if (state.currentStage === 2) {
-            const confidenceSection = document.getElementById("confidence-section");
-            if (!confidenceSection.classList.contains("hidden")) {
-                const confButtons = [...document.querySelectorAll(".confidence-btn")];
-                if (key <= confButtons.length) {
-                    confButtons[key - 1].click();
-                }
-            } else {
-                const consentButtons = [...document.querySelectorAll("[data-consent]")];
-                if (key <= consentButtons.length) {
-                    consentButtons[key - 1].click();
-                }
-            }
-            return;
-        }
-
-        // Stage 4 (index 3): bankruptcy buttons (1-3)
-        if (state.currentStage === 3) {
-            const bankruptcyButtons = [...document.querySelectorAll("[data-bankruptcy-choice]")];
-            if (key <= bankruptcyButtons.length) {
-                bankruptcyButtons[key - 1].click();
-            }
-            return;
-        }
-
-        // Stage 5 (index 4): twist buttons (1-3)
-        if (state.currentStage === 4) {
-            const twistButtons = [...document.querySelectorAll("[data-twist-answer]")];
-            if (key <= twistButtons.length) {
-                twistButtons[key - 1].click();
-            }
-            return;
-        }
-
-        // Stage 6 (index 5): owner buttons (1-5)
-        if (state.currentStage === 5) {
-            const ownerButtons = [...document.querySelectorAll(".owner-btn")];
-            if (key <= ownerButtons.length) {
-                ownerButtons[key - 1].click();
-            }
-        }
-    }
 });
 
-// ── Init ─────────────────────────────────────────────────────────────────────
+// ── Initialization ───────────────────────────────────────────────────────────
 
 showScreen(0);
-updateTwistDisplay();

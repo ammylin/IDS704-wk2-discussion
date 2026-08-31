@@ -59,7 +59,7 @@ No build tools or dependencies are required, as the simulation is a self-contain
    python3 -m http.server 8000
    ```
 
-3. Or visit [https://ammylin.github.io/IDS704-wk2-discussion/](url). 
+3. Or visit [https://ammylin.github.io/IDS704-wk2-discussion/](https://ammylin.github.io/IDS704-wk2-discussion/). 
 
 ## Keyboard Shortcuts
 

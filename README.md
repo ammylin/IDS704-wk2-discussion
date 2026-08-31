@@ -44,7 +44,7 @@ On the opening screen, students select one of four roles:
 
 ## Getting Started
 
-No build tools or dependencies are required — the simulation is a self-contained static web application.
+No build tools or dependencies are required, as the simulation is a self-contained static web application.
 
 1. **Open in a browser**
    ```bash
@@ -57,6 +57,8 @@ No build tools or dependencies are required — the simulation is a self-contain
    ```bash
    python3 -m http.server 8000
    ```
+
+3. Or visit [https://ammylin.github.io/IDS704-wk2-discussion/](url). 
 
 ## Keyboard Shortcuts
 

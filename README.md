@@ -1,6 +1,7 @@
-# 23andMe Data Crisis — Choose-Your-Own-Adventure Ethics Simulation
+# 23andMe Data Crisis: Choose-Your-Own-Adventure Ethics Simulation
+## Discussion led by Ammy Lin and Tonantzin Real Rojas
 
-An interactive, browser-based ethics simulation for **IDS 704: Ethics in Data Science** (Week 2 Discussion). Players select one of four distinct stakeholder roles to experience the ethical dilemmas around genetic data privacy, corporate bankruptcy, informed consent, and individual responsibility.
+An interactive, browser-based ethics simulation for **IDS 704: Data Science Ethics and Policy** (Week 2 Discussion). Players select one of four distinct stakeholder roles to experience the ethical dilemmas around genetic data privacy, corporate bankruptcy, informed consent, and individual responsibility.
 
 > **Reality check:** This simulation is inspired by real events involving 23andMe, but scenarios, offers, decisions, and dilemmas are hypothetical and designed for classroom ethical analysis.
 
@@ -12,8 +13,8 @@ On the opening screen, students select one of four roles:
 
 | Character | Perspective & Dilemma |
 |---|---|
-| 🛒 **The Consumer** | Trusted 23andMe with their DNA years ago. Faces the terms & conditions fine-print reality, chooses comfort levels with data sharing, and confronts what happens to their genome during bankruptcy. |
-| 💼 **The Executive** | CEO running out of cash with 400 employees and creditors at the door. Decides whether to accept an unrestricted $50M buyout from Big Pharma, sell with conditions, or liquidate and destroy the data. |
+| 🛒 **The Consumer** | Trusted 23andMe with their DNA years ago; now faces the terms & conditions fine-print reality, chooses comfort levels with data sharing, and confronts what happens to their genome during bankruptcy. |
+| 💼 **The Executive** | CEO running out of cash with 400 employees and creditors at the door. Needs to decide whether to accept an unrestricted $50M buyout from Big Pharma, sell with conditions, or liquidate and destroy the data. |
 | 🏢 **The Buyer** | Business acquisition lead at NovaCure Pharmaceuticals evaluating how to use the 15M genetic database to discover new medicines while balancing user consent and public trust. |
 | 🔬 **The Data Scientist** | Senior data scientist with **$87,000 in student loan debt** who discovers soft-deleted user records in the sale pipeline. Faces the whistleblower dilemma: speak up and risk career ruin/debt default, or stay quiet and survive. |
 
@@ -70,4 +71,4 @@ No build tools or dependencies are required, as the simulation is a self-contain
 
 ## License & Attribution
 
-Created for educational use in IDS 704: Ethics in Data Science at Duke University. Developed using **Gemini 3.7 Flash** based on custom classroom ethics game design.
+Created for educational use in IDS 704: Data Science Ethics and Policy with Professor Jana Schaich Borg at Duke University. Developed using **Gemini 3.7 Flash** based on custom classroom ethics game design.

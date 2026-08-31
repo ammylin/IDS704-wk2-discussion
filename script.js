@@ -106,7 +106,7 @@ const roleProfiles = {
                 },
                 "join-lawsuit": {
                     title: "CONSEQUENCE: You Joined the Class-Action",
-                    story: "A federal judge places a temporary restraining order on the database sale. The news goes viral, sparking a national debate on digital ownership.",
+                    story: "A federal judge places a temporary stop on the database sale. The news goes viral, sparking a national debate on digital ownership.",
                     impact: "The sale is frozen for months. 23andMe warns that without cash from the sale, servers will be shut off without an orderly shutdown."
                 },
                 "accept-research": {
@@ -753,15 +753,15 @@ function renderDilemmaTradeoffs(choiceId) {
         <div class="tradeoff-matrix-title">PROJECTED TRADEOFFS</div>
         <div class="tradeoff-subgrid">
             ${items
-                .map(
-                    (item) => `
+            .map(
+                (item) => `
                 <div class="tradeoff-item tradeoff-${item.level}">
                     <span class="tradeoff-indicator tradeoff-dot-${item.level}" aria-hidden="true"></span>
                     <span class="tradeoff-dimension">${item.dimension}</span>
                     <span class="tradeoff-level-label">${levelLabels[item.level]}</span>
                 </div>`
-                )
-                .join("")}
+            )
+            .join("")}
         </div>
     `;
 

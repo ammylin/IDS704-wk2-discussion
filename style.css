@@ -282,7 +282,10 @@ button {
     color: var(--red);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     margin: 0;
     line-height: 1.1;
     letter-spacing: -0.03em;
@@ -758,6 +761,7 @@ h2 {
 .twist-choice-row .choice-btn[data-twist-answer="yes"].is-selected {
     border-color: var(--mint);
 }
+
 .twist-choice-row .choice-btn[data-twist-answer="yes"].is-selected {
     background: linear-gradient(135deg, #0b8f7d, #14b8a6);
     box-shadow: 0 8px 24px rgba(11, 143, 125, 0.35);
@@ -767,6 +771,7 @@ h2 {
 .twist-choice-row .choice-btn[data-twist-answer="no"].is-selected {
     border-color: var(--red);
 }
+
 .twist-choice-row .choice-btn[data-twist-answer="no"].is-selected {
     background: linear-gradient(135deg, #d63a4d, #f43f5e);
     box-shadow: 0 8px 24px rgba(214, 58, 77, 0.35);
@@ -776,6 +781,7 @@ h2 {
 .twist-choice-row .choice-btn[data-twist-answer="maybe"].is-selected {
     border-color: var(--amber);
 }
+
 .twist-choice-row .choice-btn[data-twist-answer="maybe"].is-selected {
     background: linear-gradient(135deg, #d77a1d, #f59e0b);
     box-shadow: 0 8px 24px rgba(215, 122, 29, 0.35);
@@ -918,9 +924,17 @@ h2 {
     background: rgba(255, 255, 255, 0.9);
 }
 
-.tradeoff-item.tradeoff-positive { border-left-color: var(--mint); }
-.tradeoff-item.tradeoff-mixed { border-left-color: var(--amber); }
-.tradeoff-item.tradeoff-negative { border-left-color: var(--red); }
+.tradeoff-item.tradeoff-positive {
+    border-left-color: var(--mint);
+}
+
+.tradeoff-item.tradeoff-mixed {
+    border-left-color: var(--amber);
+}
+
+.tradeoff-item.tradeoff-negative {
+    border-left-color: var(--red);
+}
 
 .tradeoff-indicator {
     width: 8px;
@@ -929,9 +943,17 @@ h2 {
     flex-shrink: 0;
 }
 
-.tradeoff-dot-positive { background: var(--mint); }
-.tradeoff-dot-mixed { background: var(--amber); }
-.tradeoff-dot-negative { background: var(--red); }
+.tradeoff-dot-positive {
+    background: var(--mint);
+}
+
+.tradeoff-dot-mixed {
+    background: var(--amber);
+}
+
+.tradeoff-dot-negative {
+    background: var(--red);
+}
 
 .tradeoff-dimension {
     flex: 1;
@@ -993,7 +1015,7 @@ h2 {
 
 .owner-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 12px;
     margin: 18px 0;
 }
@@ -1394,18 +1416,23 @@ h2 {
     .character-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .briefing-stats {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .data-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .owner-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .role-swap-grid {
         grid-template-columns: 1fr;
     }
+
     .tradeoff-grid,
     .recap-grid {
         grid-template-columns: 1fr;
@@ -1413,6 +1440,7 @@ h2 {
 }
 
 @media (max-width: 600px) {
+
     .character-grid,
     .briefing-stats,
     .data-grid,

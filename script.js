@@ -2,6 +2,12 @@
 
 const totalStages = 7;
 
+// Default instructor/facilitator email addresses
+const DEFAULT_RECIPIENT_EMAILS = [
+    "ammy.lin@duke.edu",
+    "tonantzin.realrojas@duke.edu"
+];
+
 const state = {
     selectedRole: null, // "consumer", "executive", "buyer", "data-scientist"
     currentStage: 0,
@@ -33,70 +39,99 @@ const roleProfiles = {
         context: {
             eyebrow: "STAGE 02 • YOUR PERSPECTIVE",
             title: "YOU SENT YOUR SALIVA IN A TUBE.",
-            lead: "Five years ago, you paid $99 to learn where your ancestors came from and discover genetic health risks.",
+            lead: "Five years ago, you paid $99 to find out where your family came from and check for hereditary health conditions.",
             bodyHtml: `
                 <div class="context-story-card">
-                    <p>You checked a box saying "I agree to the Terms of Service" without reading the 42 pages of fine print.</p>
-                    <p>Now you see news alerts: <strong>23andMe is facing bankruptcy</strong>, and they might sell their entire database to the highest bidder to pay off debts.</p>
-                    <p class="callout-text">Let's see what you actually signed up for back then.</p>
+                    <p>You checked a quick box saying <em>"I agree to the Terms of Service"</em> without reading the fine print.</p>
+                    <p>Now news alerts pop up: <strong>23andMe is going bankrupt</strong>, and the company might sell its entire database to the highest bidder to pay its debts.</p>
+                    <p class="callout-text">Let's look at what you actually agreed to back then.</p>
                 </div>
             `,
             showPolicy: true,
         },
         dataPrompt: {
             eyebrow: "STAGE 03 • YOUR COMFORT ZONE",
-            title: "WHAT DATA ARE YOU COMFORTABLE SHARING?",
-            prompt: "Select the types of personal data you would be comfortable with 23andMe sharing with other companies.",
-            discussion: "What makes sharing one category of your data more or less acceptable than another? Is genetic data different from location or shopping data?",
-            note: "Consider: You can change your password or credit card number if it's breached. You cannot change your DNA.",
+            title: "WHAT DATA WOULD YOU BE OKAY SHARING?",
+            prompt: "Select the kinds of personal data you would be comfortable with 23andMe sharing with other companies.",
+            discussion: "What makes sharing one category of data feel safer or riskier than another? Is genetic data fundamentally different from your shopping history or location?",
+            note: "Consider: If your credit card is stolen, you cancel it. If your DNA is leaked, you cannot change your genome.",
         },
         dilemma: {
             eyebrow: "STAGE 04 • BREAKING NEWS",
             title: "YOUR DNA IS ABOUT TO BE AUCTIONED.",
-            headline: "23andMe is entering Chapter 11 bankruptcy. A pharmaceutical conglomerate has bid $50M to acquire the customer database.",
+            headline: "23andMe is entering bankruptcy. A large pharmaceutical company has offered $50 million to buy the customer database.",
             prompt: "WHAT ACTION DO YOU TAKE AS A CONSUMER?",
             choices: [
-                { id: "delete", label: "1. REQUEST DATA DELETION", desc: "Demand your account and biological samples be destroyed immediately." },
-                { id: "join-lawsuit", label: "2. JOIN CLASS-ACTION LAWSUIT", desc: "Sue to block the transfer of genetic assets without explicit re-consent." },
-                { id: "accept-research", label: "3. ALLOW TRANSFER FOR CURES", desc: "Accept the transfer if it promises to advance medical cures and drug discovery." }
+                {
+                    id: "delete",
+                    label: "1. DEMAND IMMEDIATE DATA DELETION",
+                    desc: "Request that your account, raw genetic data, and physical saliva sample be completely wiped from company servers."
+                },
+                {
+                    id: "join-lawsuit",
+                    label: "2. JOIN A CLASS-ACTION LAWSUIT",
+                    desc: "Join other customers to legally block the sale until every user is asked for fresh permission."
+                },
+                {
+                    id: "accept-research",
+                    label: "3. ALLOW THE TRANSFER TO HELP MEDICAL RESEARCH",
+                    desc: "Let the pharma company have your data, hoping it helps discover treatments for serious diseases."
+                }
             ],
             tradeoffs: {
                 delete: [
                     { dimension: "Personal Privacy Protection", level: "positive" },
-                    { dimension: "Control Over Future Use", level: "positive" },
-                    { dimension: "Contribution to Medical Research", level: "negative" },
-                    { dimension: "Certainty (Will backups really be wiped?)", level: "mixed" },
+                    { dimension: "Control Over Your Future", level: "positive" },
+                    { dimension: "Contribution to Medical Cures", level: "negative" },
+                    { dimension: "Guarantee (Will backup servers actually wipe it?)", level: "mixed" },
                 ],
                 "join-lawsuit": [
-                    { dimension: "Advocacy for Consumer Rights", level: "positive" },
+                    { dimension: "Standing Up for User Rights", level: "positive" },
                     { dimension: "Immediate Resolution", level: "negative" },
-                    { dimension: "Public Awareness", level: "positive" },
-                    { dimension: "Legal Complexity & Delay", level: "mixed" },
+                    { dimension: "Public Awareness & Media Attention", level: "positive" },
+                    { dimension: "Court Delays & Legal Costs", level: "mixed" },
                 ],
                 "accept-research": [
-                    { dimension: "Potential Medical Discoveries", level: "positive" },
-                    { dimension: "Personal Privacy & Relative Impact", level: "negative" },
-                    { dimension: "Corporate Profit off Your DNA", level: "negative" },
-                    { dimension: "Convenience / Peace of Mind", level: "mixed" },
+                    { dimension: "Potential for Life-Saving Treatments", level: "positive" },
+                    { dimension: "Personal & Family Privacy Risk", level: "negative" },
+                    { dimension: "Private Company Profiting From Your DNA", level: "negative" },
+                    { dimension: "No Hassle or Legal Battles", level: "mixed" },
                 ]
             },
-            discussion: "If you delete your profile, what happens to the aggregate data and research models already trained on your genome?"
+            consequences: {
+                delete: {
+                    title: "CONSEQUENCE: You Submitted a Deletion Demand",
+                    story: "You receive an automated email: <em>'Your request is queued. However, data already shared with research partners or stored in analytical models cannot be retrieved.'</em>",
+                    impact: "Your profile is removed from the active website, but your genetic markers remain baked into past statistical studies."
+                },
+                "join-lawsuit": {
+                    title: "CONSEQUENCE: You Joined the Class-Action",
+                    story: "A federal judge places a temporary restraining order on the database sale. The news goes viral, sparking a national debate on digital ownership.",
+                    impact: "The sale is frozen for months. 23andMe warns that without cash from the sale, servers will be shut off without an orderly shutdown."
+                },
+                "accept-research": {
+                    title: "CONSEQUENCE: You Allowed the Data Transfer",
+                    story: "The buyer absorbs your files into their cloud platform. Two years later, they announce a patent for a profitable new cancer immunotherapy.",
+                    impact: "You contributed to medical progress, but you receive no share of profits and have no control over future company buyouts."
+                }
+            },
+            discussion: "If you delete your profile, what happens to research models that were already trained using your genetic data?"
         },
         twists: [
             {
-                title: "The buyer claims all transferred genetic data will be 'de-identified' and aggregated.",
-                question: "Does this ease your privacy concerns?"
+                title: "The buyer promises that your name and email will be stripped from your DNA before researchers see it.",
+                question: "Does this make you feel secure about the sale?"
             },
             {
-                title: "Your biological sibling never signed up for 23andMe, but because you did, 50% of their DNA markers are identifiable.",
+                title: "Even if your siblings never took a DNA test, your test results reveal roughly 50% of their genetic code.",
                 question: "Do you have the moral right to decide what happens to shared family DNA?"
             },
             {
-                title: "The acquiring company announces a breakthrough Alzheimer's treatment using this exact database.",
-                question: "Does this justify selling the data without your renewed consent?"
+                title: "The buyer discovers a new treatment for Alzheimer's using this database.",
+                question: "Does saving lives justify selling the data without asking you again?"
             }
         ],
-        ownerQuestion: "Does your answer change knowing your biological relatives' privacy is also exposed by your genome?"
+        ownerQuestion: "Does your answer change knowing that your genetic data can also expose your biological family members?"
     },
 
     executive: {
@@ -106,76 +141,105 @@ const roleProfiles = {
         context: {
             eyebrow: "STAGE 02 • THE BOARDROOM",
             title: "THE COMPANY IS RUNNING OUT OF CASH.",
-            lead: "As Chief Executive Officer, you are responsible for 400 employees, public shareholders, and creditors.",
+            lead: "As the Chief Executive Officer, you are responsible for 400 employees, company debts, and shareholders.",
             stats: [
                 { value: "$50M", label: "Cash Burn / Year" },
                 { value: "400", label: "Employees At Risk" },
                 { value: "15M+", label: "Genotyped Customers" },
-                { value: "30 Days", label: "Runway Remaining" }
+                { value: "30 Days", label: "Cash Remaining" }
             ],
             bodyHtml: `
                 <div class="context-story-card">
-                    <p>The consumer genetics business model has hit a wall: once people find their ancestry, they stop paying subscription fees.</p>
-                    <p>Creditors are at the door. If the company liquidates in Chapter 7 bankruptcy, a court bankruptcy trustee will sell your assets anyway to the highest bidder.</p>
-                    <p class="callout-text">Your primary valuable asset is the anonymized database of 15+ million human genomes.</p>
+                    <p>The original business model hit a wall: once people find their ancestry results, they stop paying monthly fees.</p>
+                    <p>Lenders and creditors are demanding payment. If the company goes into liquidation, a court trustee will sell all company assets to the highest bidder anyway.</p>
+                    <p class="callout-text">Your most valuable remaining asset is the database of 15+ million customer DNA records.</p>
                 </div>
             `,
             showPolicy: false,
         },
         dataPrompt: {
-            eyebrow: "STAGE 03 • MONETIZATION STRATEGY",
-            title: "WHAT ASSETS DO YOU PUT ON THE TABLE?",
-            prompt: "Select the categories of user data you are willing to bundle into the asset sale package.",
-            discussion: "Which data categories generate the highest commercial valuation, and which ones carry catastrophic reputational/legal risk?",
-            note: "Valuation insight: Bundling health surveys + DNA multiplies the database value 5x compared to raw genetic markers alone.",
+            eyebrow: "STAGE 03 • ASSET VALUATION",
+            title: "WHAT ASSETS DO YOU PUT UP FOR SALE?",
+            prompt: "Select the categories of user data you are willing to bundle into the sale package.",
+            discussion: "Which data categories bring in the highest price, and which ones carry the highest legal and ethical risks?",
+            note: "Valuation reality: Bundling health surveys with DNA data makes the database worth 5x more than raw DNA alone.",
         },
         dilemma: {
             eyebrow: "STAGE 04 • THE BUYOUT OFFER",
-            title: "A $50,000,000 LIFELINE FROM BIG PHARMA.",
-            headline: "NovaCure Pharmaceuticals offers $50M in cash for complete access and ownership of 23andMe's research databases.",
+            title: "A $50,000,000 LIFELINE FROM A PHARMA COMPANY.",
+            headline: "NovaCure Pharmaceuticals offers $50M cash for full ownership of 23andMe's customer database.",
             prompt: "WHAT DO YOU PROPOSE TO THE BOARD OF DIRECTORS?",
             choices: [
-                { id: "sell-unrestricted", label: "1. ACCEPT UNRESTRICTED SALE", desc: "Sell full database ownership to NovaCure to maximize cash and pay all creditors in full." },
-                { id: "sell-conditional", label: "2. SELL WITH ETHICAL STRINGS", desc: "Require NovaCure to guarantee original privacy promises and give users 30 days to opt out (accept 40% lower valuation)." },
-                { id: "destroy-liquidate", label: "3. REFUSE & PURGE DATA", desc: "Block the data sale and order all genetic records wiped before entering bankruptcy liquidation." }
+                {
+                    id: "sell-unrestricted",
+                    label: "1. ACCEPT THE FULL $50M SALE",
+                    desc: "Sell the complete database without restrictions to pay all debts and provide severance to your 400 employees."
+                },
+                {
+                    id: "sell-conditional",
+                    label: "2. SELL WITH PRIVACY CONDITIONS",
+                    desc: "Require the buyer to follow the original privacy rules and give users 30 days to opt out (accepting a 40% lower purchase price)."
+                },
+                {
+                    id: "destroy-liquidate",
+                    label: "3. REFUSE THE SALE AND PURGE THE DATA",
+                    desc: "Block the sale and order the customer database deleted before shutting down the company."
+                }
             ],
             tradeoffs: {
                 "sell-unrestricted": [
-                    { dimension: "Fiduciary Duty to Creditors/Investors", level: "positive" },
-                    { dimension: "Severance & Survival for Employees", level: "positive" },
-                    { dimension: "User Trust & Historical Reputation", level: "negative" },
-                    { dimension: "Public Backlash / Regulatory Inquiries", level: "negative" },
+                    { dimension: "Paying Debts & Employee Severance", level: "positive" },
+                    { dimension: "Preventing Immediate Bankruptcy Lawsuits", level: "positive" },
+                    { dimension: "Customer Trust & Company Legacy", level: "negative" },
+                    { dimension: "Risk of Government Privacy Investigations", level: "negative" },
                 ],
                 "sell-conditional": [
-                    { dimension: "Fiduciary Compromise (Lower Payout)", level: "mixed" },
-                    { dimension: "Ethical Responsibility & User Respect", level: "positive" },
-                    { dimension: "Deal Completion Risk (Buyer may walk)", level: "mixed" },
-                    { dimension: "Regulatory & Legal Defense", level: "positive" },
+                    { dimension: "Lower Cash Payout (Debts only partly paid)", level: "mixed" },
+                    { dimension: "Respecting Customer Expectations", level: "positive" },
+                    { dimension: "Risk that the Buyer Walks Away", level: "mixed" },
+                    { dimension: "Strong Legal & Ethical Defense", level: "positive" },
                 ],
                 "destroy-liquidate": [
-                    { dimension: "Total User Privacy Protection", level: "positive" },
-                    { dimension: "Legal Liability to Creditors (Lawsuits against Board)", level: "negative" },
-                    { dimension: "Complete Loss of Jobs & Company Value", level: "negative" },
-                    { dimension: "Destruction of Valuable Medical Research", level: "negative" },
+                    { dimension: "Total Customer Privacy Protection", level: "positive" },
+                    { dimension: "Lawsuits from Creditors against the Board", level: "negative" },
+                    { dimension: "Zero Severance for 400 Laid-off Workers", level: "negative" },
+                    { dimension: "Loss of Research Data for Future Cures", level: "negative" },
                 ]
             },
-            discussion: "Under corporate law, executives have a fiduciary duty to maximize value for creditors in insolvency. Is breaking trust with users an acceptable price?"
+            consequences: {
+                "sell-unrestricted": {
+                    title: "CONSEQUENCE: Full Sale Approved",
+                    story: "The wire transfer clears. 400 employees receive severance packages and debts are settled. But the headlines are brutal: <em>'23andMe Sells Millions of Genomes to Big Pharma.'</em>",
+                    impact: "State Attorneys General launch investigations into whether the sale broke state consumer protection laws."
+                },
+                "sell-conditional": {
+                    title: "CONSEQUENCE: Conditional Sale Negotiated",
+                    story: "NovaCure accepts a $30M price tag. 1.2 million users opt out and have their records deleted. The remaining 14M records are transferred with strict privacy caps.",
+                    impact: "You preserved employee benefits and respected user choices, but creditors sue the board for accepting a lower purchase offer."
+                },
+                "destroy-liquidate": {
+                    title: "CONSEQUENCE: Data Wiped, Immediate Liquidation",
+                    story: "Engineers run the deletion scripts. Privacy advocates praise the decision as a landmark victory for human rights.",
+                    impact: "Creditors file emergency lawsuits against board members personally for destroying company assets, and staff receive zero severance."
+                }
+            },
+            discussion: "Under corporate law, company executives have a duty to get the most money possible for creditors during bankruptcy. Is breaking customer trust an acceptable price?"
         },
         twists: [
             {
-                title: "A foreign healthcare conglomerate offers $120M—more than double NovaCure—but operates outside US FTC jurisdiction.",
-                question: "Do you take the higher bid to save more employee jobs and pay off all debt?"
+                title: "A foreign healthcare company offers $120M (more than double), but operates outside US privacy regulations.",
+                question: "Do you take the higher bid to save more jobs and pay off all debt?"
             },
             {
-                title: "State Attorneys General warn they will sue to halt any sale that includes users who never checked 'research consent'.",
-                question: "Do you spend dwindling cash fighting them in court to close the deal?"
+                title: "State regulators warn they will sue if you sell data from users who never checked 'research consent'.",
+                question: "Do you spend scarce cash fighting them in court to close the deal?"
             },
             {
-                title: "Your engineering lead warns that extracting and purging opt-outs will delay the sale by 6 months, causing immediate insolvency.",
-                question: "Do you proceed with the sale without processing pending deletion requests?"
+                title: "Your engineering lead warns that processing user deletion requests will delay the sale by 6 months, causing immediate shutdown.",
+                question: "Do you proceed with the sale without waiting for pending deletion requests?"
             }
         ],
-        ownerQuestion: "Does your answer change if selling the database is the only way to fund employee severance and prevent immediate collapse?"
+        ownerQuestion: "Does your answer change if selling the database is the only way to pay your employees severance?"
     },
 
     buyer: {
@@ -183,78 +247,107 @@ const roleProfiles = {
         name: "THE BUYER",
         icon: "🏢",
         context: {
-            eyebrow: "STAGE 02 • M&A STRATEGY",
-            title: "ACQUIRING THE WORLD'S GENOMIC TREASURY.",
-            lead: "You are the VP of Strategic Acquisitions at NovaCure Pharmaceuticals.",
+            eyebrow: "STAGE 02 • THE OPPORTUNITY",
+            title: "A CHANCE TO BUY 15 MILLION GENETIC PROFILES.",
+            lead: "You lead business acquisitions at NovaCure Pharmaceuticals, a company developing treatments for major illnesses.",
             stats: [
-                { value: "$1.2B", label: "Drug Dev Cost" },
+                { value: "$1.2B", label: "Avg Drug Cost" },
                 { value: "10-15 Yrs", label: "Time to Market" },
-                { value: "85%", label: "Target Failure Rate" },
+                { value: "85%", label: "Lab Failure Rate" },
                 { value: "15M", label: "Patient Profiles" }
             ],
             bodyHtml: `
                 <div class="context-story-card">
-                    <p>Drug discovery is excruciatingly slow and expensive. Access to 15 million genotyped individuals with matched disease histories could unlock treatments for Parkinson's, cancer, and rare autoimmune disorders.</p>
-                    <p>Building this cohort from scratch would cost billions and take decades. 23andMe's bankruptcy is a once-in-a-generation acquisition opportunity.</p>
-                    <p class="callout-text">Your challenge: How to maximize the research and commercial value of the asset without inciting a regulatory nightmare.</p>
+                    <p>Developing new medications is slow, risky, and expensive. Having access to 15 million people's DNA paired with their health survey answers could help uncover treatments for cancer, Alzheimer's, and rare diseases.</p>
+                    <p>Building a database like this from scratch would take decades and cost billions. 23andMe's bankruptcy gives your team a rare shortcut.</p>
+                    <p class="callout-text">Your challenge: How to use this data to find new medicines without triggering public backlash or government fines.</p>
                 </div>
             `,
             showPolicy: false,
         },
         dataPrompt: {
-            eyebrow: "STAGE 03 • ASSET TARGETING",
-            title: "WHICH DATASETS ARE ESSENTIAL TO YOUR PIPELINE?",
-            prompt: "Select the data categories your pharmaceutical AI models need to train precision medicine algorithms.",
-            discussion: "If genetic data is completely stripped of lifestyle surveys and health symptoms, does it lose its medicinal value?",
-            note: "AI research insight: Without linked phenotype data (family history, diet, diagnosed diseases), raw DNA sequences provide limited insight for targeted drug synthesis.",
+            eyebrow: "STAGE 03 • TARGETING DATA",
+            title: "WHICH DATASETS DOES YOUR RESEARCH TEAM NEED?",
+            prompt: "Select the types of user data your scientific team needs to discover new treatments.",
+            discussion: "If genetic data is stripped of lifestyle details and medical symptoms, does it lose its value for finding treatments?",
+            note: "Medical insight: Without paired health details (family history, diet, diagnosed conditions), raw DNA is much harder to use for developing targeted drugs.",
         },
         dilemma: {
-            eyebrow: "STAGE 04 • ACQUISITION TERMS",
-            title: "HOW DO YOU STRUCTURE THE DATA ACQUISITION?",
-            headline: "NovaCure is drafting its final bid for the bankruptcy court hearing tomorrow morning.",
-            prompt: "WHAT ACQUISITION FRAMEWORK DO YOU SUBMIT?",
+            eyebrow: "STAGE 04 • THE ACQUISITION PLAN",
+            title: "HOW DO YOU PLAN TO USE THE DATA?",
+            headline: "NovaCure is preparing its final proposal for the bankruptcy court tomorrow morning.",
+            prompt: "WHAT ACQUISITION PLAN DO YOU SUBMIT?",
             choices: [
-                { id: "clean-slate", label: "1. BUY WITHOUT PAST LIABILITIES", desc: "Purchase the asset 'free and clear' of prior terms; apply NovaCure's proprietary terms of service." },
-                { id: "honor-consent", label: "2. HONOR LEGACY PRIVACY & RE-CONSENT", desc: "Strictly segregate users who opted into research and solicit fresh explicit consent for commercial drug trials." },
-                { id: "open-consortium", label: "3. NON-PROFIT RESEARCH ALLIANCE", desc: "Form an open scientific consortium with NIH/Universities, sharing data publicly while keeping royalty rights on discovered targets." }
+                {
+                    id: "clean-slate",
+                    label: "1. BUY WITHOUT PAST RESTRICTIONS",
+                    desc: "Buy the database free and clear of old promises, applying NovaCure's own standard terms for research and drug commercialization."
+                },
+                {
+                    id: "honor-consent",
+                    label: "2. HONOR OLD PRIVACY RULES & ASK FOR NEW CONSENT",
+                    desc: "Only use data from customers who opted into research, and reach out to request fresh consent for commercial drug trials."
+                },
+                {
+                    id: "open-consortium",
+                    label: "3. SHARE WITH UNIVERSITIES AS AN OPEN ALLIANCE",
+                    desc: "Partner with universities and public health agencies to share findings openly, while keeping first rights to make new drugs."
+                }
             ],
             tradeoffs: {
                 "clean-slate": [
-                    { dimension: "Speed of Drug Discovery Pipeline", level: "positive" },
-                    { dimension: "Exclusivity & Commercial Profitability", level: "positive" },
-                    { dimension: "Public Trust & Ethical Standing", level: "negative" },
-                    { dimension: "FTC & Regulatory Scrutiny", level: "negative" },
+                    { dimension: "Speed in Developing New Medicines", level: "positive" },
+                    { dimension: "Maximum Corporate Profitability", level: "positive" },
+                    { dimension: "Public Trust & Customer Approval", level: "negative" },
+                    { dimension: "Risk of Regulatory Lawsuits & Fines", level: "negative" },
                 ],
                 "honor-consent": [
-                    { dimension: "Ethical Legitimacy & User Respect", level: "positive" },
-                    { dimension: "Regulatory & Compliance Safety", level: "positive" },
-                    { dimension: "Usable Dataset Size (Drop-off up to 60%)", level: "negative" },
-                    { dimension: "Return on Investment (ROI)", level: "mixed" },
+                    { dimension: "Ethical Standing & Consumer Respect", level: "positive" },
+                    { dimension: "Compliance with Privacy Regulators", level: "positive" },
+                    { dimension: "Smaller Usable Dataset (many won't respond)", level: "negative" },
+                    { dimension: "Return on Financial Investment", level: "mixed" },
                 ],
                 "open-consortium": [
                     { dimension: "Global Scientific & Public Benefit", level: "positive" },
-                    { dimension: "Academic & Institutional Goodwill", level: "positive" },
-                    { dimension: "Direct Corporate Monopoly Profits", level: "negative" },
-                    { dimension: "Complex Multi-Stakeholder Governance", level: "mixed" },
+                    { dimension: "High Academic & Community Goodwill", level: "positive" },
+                    { dimension: "Exclusive Commercial Monopoly", level: "negative" },
+                    { dimension: "Complex Multi-Organization Management", level: "mixed" },
                 ]
             },
-            discussion: "When you buy physical machines at bankruptcy, you inherit no moral relationship with past customers. Does acquiring intimate personal data follow the same rules?"
+            consequences: {
+                "clean-slate": {
+                    title: "CONSEQUENCE: Unrestricted Access Acquired",
+                    story: "Your scientists begin running drug discovery algorithms across all 15M genomes. Within 6 months, promising targets for autoimmune disorders are found.",
+                    impact: "Consumer groups organize boycotts, and the Federal Trade Commission files an inquiry into your company's data practices."
+                },
+                "honor-consent": {
+                    title: "CONSEQUENCE: New Consent Campaign Launched",
+                    story: "NovaCure emails all users asking for clear permission. About 40% enthusiastically agree, while 60% ignore or delete their accounts.",
+                    impact: "Your dataset is smaller, but every record is legally bulletproof, and medical journals praise your transparent ethical standards."
+                },
+                "open-consortium": {
+                    title: "CONSEQUENCE: Open Research Consortium Formed",
+                    story: "NovaCure joins forces with the NIH and leading research universities. Global scientists discover three new genetic markers for Parkinson's disease.",
+                    impact: "Your company is hailed as a leader in open science, though investors complain that profits must be shared with research partners."
+                }
+            },
+            discussion: "When you buy factory equipment at an auction, you have no relationship with the previous customers. Does buying personal genetic data follow the same rule?"
         },
         twists: [
             {
-                title: "Your modeling team discovers that de-anonymizing rare genetic variants is possible using publicly available genealogy registries.",
+                title: "Your scientists discover that rare genetic markers can be matched back to real names using public family tree websites.",
                 question: "Do you allow internal research teams to re-identify patients to verify clinical outcomes?"
             },
             {
-                title: "A major health insurer offers to co-fund the acquisition in exchange for risk-scoring analytics on customer cohorts.",
-                question: "Do you monetize the database through secondary insurance partnerships?"
+                title: "A major health insurance company offers to split the purchase cost if you share health risk scores on customer groups.",
+                question: "Do you partner with the insurance company to save acquisition costs?"
             },
             {
-                title: "Federal regulators signal they will approve the purchase only if your patents resulting from the data are capped at generic pricing.",
-                question: "Do you still proceed with buying the database under pricing caps?"
+                title: "Government regulators say they will approve the purchase only if any medicines you invent are sold at affordable, capped prices.",
+                question: "Do you still go through with buying the database under price limits?"
             }
         ],
-        ownerQuestion: "Does your answer change if commercial incentives are the only realistic engine to fund lifesaving drug trials?"
+        ownerQuestion: "Does your answer change if commercial incentives are the most realistic way to fund expensive life-saving clinical trials?"
     },
 
     "data-scientist": {
@@ -262,78 +355,107 @@ const roleProfiles = {
         name: "THE DATA SCIENTIST",
         icon: "🔬",
         context: {
-            eyebrow: "STAGE 02 • THE ETHICAL CRUCIBLE",
-            title: "YOU DISCOVER WHAT'S IN THE SALE PIPELINE.",
-            lead: "You are a Senior Data Scientist at 23andMe. You have $87,000 in student loan debt and support your family.",
+            eyebrow: "STAGE 02 • THE ETHICAL DILEMMA",
+            title: "YOU DISCOVER WHAT'S IN THE SALE DATA.",
+            lead: "You are a Senior Data Scientist at 23andMe. You have $87,000 in student loan debt and financially support your family.",
             stats: [
                 { value: "$87,000", label: "Student Loan Debt" },
                 { value: "$1,450", label: "Monthly Payment" },
-                { value: "H-1B / Visa", label: "Dependent on Job" },
+                { value: "Work Visa", label: "Tied to Employment" },
                 { value: "2 Weeks", label: "Emergency Savings" }
             ],
             bodyHtml: `
                 <div class="context-story-card">
-                    <p>While preparing the data export pipeline for prospective bidders, you discover that the data dump includes records of users who explicitly hit <strong>'Delete My Account'</strong> over the past two years.</p>
-                    <p>Because of engineering backlogs and legacy schema designs, their raw genome files were 'soft-deleted' in UI views but remained in the analytical warehouse.</p>
-                    <p class="callout-text">When you flag this to management, a director quietly whispers: <em>"Don't hold up this deal. If the sale collapses, everyone's out of a job by Friday—including you."</em></p>
+                    <p>While preparing the data export files for potential buyers, you discover that the dataset includes records from customers who clicked <strong>'Delete My Account'</strong> over the past two years.</p>
+                    <p>Because of engineering backlogs, their records were hidden on the website but remained stored in the main data warehouse.</p>
+                    <p class="callout-text">When you flag this to your manager, they quietly tell you: <em>"Don't hold up this sale. If this deal falls through, everyone is laid off by Friday—including you."</em></p>
                 </div>
             `,
             showPolicy: false,
         },
         dataPrompt: {
             eyebrow: "STAGE 03 • AUDITING THE PIPELINE",
-            title: "WHICH DATA LEAKS POSE THE GRAVEST ETHICAL RISKS?",
-            prompt: "Select the categories of residual or unscrubbed data you are most alarmed to find in the unredacted export bucket.",
-            discussion: "Why is an internal data scientist often the only barrier between algorithmic convenience and systemic violation of user rights?",
-            note: "Engineering reality: In massive distributed data lakes, true 'Right to be Forgotten' compliance is technically demanding and frequently neglected under deadline crunch.",
+            title: "WHICH LEFTOVER DATA IS THE MOST HARMFUL TO LEAK?",
+            prompt: "Select the categories of un-scrubbed data that you are most concerned to find in the export bucket.",
+            discussion: "Why is an internal data scientist often the only checkpoint between technical convenience and violating people's rights?",
+            note: "Engineering reality: In massive data systems, completely deleting all traces of a user's record across backups requires significant time and effort.",
         },
         dilemma: {
-            eyebrow: "STAGE 04 • THE WHISTLEBLOWER DILEMMA",
+            eyebrow: "STAGE 04 • THE WHISTLEBLOWER CHOICE",
             title: "SPEAK UP OR PROTECT YOUR LIVELIHOOD?",
-            headline: "The data package is scheduled to be transferred to the buyer's cloud infrastructure at midnight.",
+            headline: "The data package is scheduled to transfer to the buyer's servers at midnight.",
             prompt: "WHAT CHOICE DO YOU MAKE TONIGHT?",
             choices: [
-                { id: "whistleblow", label: "1. BLOW THE WHISTLE EXTERNALLY", desc: "Leak documentation of the non-deleted records to the FTC and investigative journalists. (Face termination, legal threat, and loan default)." },
-                { id: "internal-escalate", label: "2. HARD ESCALATION INTERNALLY", desc: "Threaten to resign immediately and write a formal memo to the Board of Directors demanding a halt until scrubbed." },
-                { id: "stay-quiet", label: "3. COMPLY & PROTECT YOUR FINANCIAL SURVIVAL", desc: "Keep your head down, process the pipeline, collect your severance, and pay your student loans." }
+                {
+                    id: "whistleblow",
+                    label: "1. BLOW THE WHISTLE EXTERNALLY",
+                    desc: "Send evidence of the undeleted user records to federal regulators and investigative journalists. (Risk getting fired, sued, and defaulting on student loans)."
+                },
+                {
+                    id: "internal-escalate",
+                    label: "2. ESCALATE INTERNALLY TO THE BOARD",
+                    desc: "Threaten to resign immediately and write a formal memo to the Board of Directors demanding the data transfer be paused until records are cleaned."
+                },
+                {
+                    id: "stay-quiet",
+                    label: "3. STAY QUIET & PROTECT YOUR FINANCES",
+                    desc: "Keep your head down, process the files, keep your job, and make your student loan payments."
+                }
             ],
             tradeoffs: {
                 whistleblow: [
-                    { dimension: "Personal Ethical Integrity & Public Duty", level: "positive" },
-                    { dimension: "Protection for 100,000+ Deleted Users", level: "positive" },
-                    { dimension: "Personal Financial & Career Stability ($87k Loans)", level: "negative" },
-                    { dimension: "Threat of Corporate Lawsuits & Retaliation", level: "negative" },
+                    { dimension: "Personal Integrity & Public Duty", level: "positive" },
+                    { dimension: "Protecting 100,000+ Deleted Users", level: "positive" },
+                    { dimension: "Personal Financial Stability ($87k Debt)", level: "negative" },
+                    { dimension: "Threat of Blacklisting & Retaliation", level: "negative" },
                 ],
                 "internal-escalate": [
                     { dimension: "Professional Due Diligence", level: "positive" },
-                    { dimension: "Chance of Internal Correction without Scandal", level: "mixed" },
-                    { dimension: "Risk of Being Sidelined / Fired Silently", level: "negative" },
-                    { dimension: "Personal Career Protection", level: "mixed" },
+                    { dimension: "Chance to Fix the Problem Internally", level: "mixed" },
+                    { dimension: "Risk of Being Sidelined or Quietly Let Go", level: "negative" },
+                    { dimension: "Protection of Work Visa & Standing", level: "mixed" },
                 ],
                 "stay-quiet": [
-                    { dimension: "Financial Security & Student Loan Solvency", level: "positive" },
-                    { dimension: "Family Protection & Visa/Job Continuity", level: "positive" },
+                    { dimension: "Financial Security & Loan Payments", level: "positive" },
+                    { dimension: "Family Protection & Job Continuity", level: "positive" },
                     { dimension: "Complicity in Unethical Data Transfer", level: "negative" },
-                    { dimension: "Long-term Moral Injury & Guilt", level: "negative" },
+                    { dimension: "Long-term Moral Weight & Guilt", level: "negative" },
                 ]
             },
-            discussion: "Ethics isn't free. When doing the right thing jeopardizes your ability to pay rent or service $87k in student debt, what is the realistic threshold for moral courage?"
+            consequences: {
+                whistleblow: {
+                    title: "CONSEQUENCE: You Blew the Whistle",
+                    story: "Your leak breaks on front-page news. Regulators freeze the transaction. You are fired the next morning and your company threatens legal action for leaking internal files.",
+                    impact: "You protected thousands of users, but your income stops immediately, putting your visa status and loan payments in immediate danger."
+                },
+                "internal-escalate": {
+                    title: "CONSEQUENCE: You Wrote the Board Memo",
+                    story: "The Board holds an emergency meeting and delays the sale by two weeks to scrub deleted records. Management is furious with you for slowing the deal.",
+                    impact: "The records get cleaned up, but you are excluded from future leadership meetings and assigned to minor maintenance tasks."
+                },
+                "stay-quiet": {
+                    title: "CONSEQUENCE: You Followed Orders",
+                    story: "The transfer completes at midnight. The buyout funds your paycheck and loan payments. Six months later, a cybersecurity audit discovers the undeleted records.",
+                    impact: "You kept your job and financial stability, but your name is on the data pipeline documentation, and colleagues wonder who approved the transfer."
+                }
+            },
+            discussion: "Ethics has real costs. When doing the right thing puts your rent, food, or $87k in student debt at risk, how much personal sacrifice is reasonable to expect from an employee?"
         },
         twists: [
             {
-                title: "An anonymous colleague tells you they are preparing an SEC whistleblower tip and asks you to sign your name with them.",
-                question: "Do you join the whistleblower complaint knowing collective protection is stronger but discovery is guaranteed?"
+                title: "A colleague tells you they are preparing an anonymous regulatory tip and asks you to co-sign it.",
+                question: "Do you join the complaint knowing there is strength in numbers, but discovery is likely?"
             },
             {
-                title: "The buyer offers retention bonuses of $40,000 cash to all data science staff who transition and support the pipeline integration.",
-                question: "Does the immediate opportunity to wipe out half your student loans tempt you to assist the migration?"
+                title: "The buyer offers a $40,000 cash bonus to data science employees who stay on to help integrate the database.",
+                question: "Does the chance to pay off nearly half your student loans tempt you to help with the transfer?"
             },
             {
-                title: "You realize you have write-access to the script repository and could quietly execute an unrecoverable hard-purge of the deleted records before leaving.",
-                question: "Do you take matters into your own hands through rogue code intervention?"
+                title: "You have code access to quietly run a script that permanently deletes the leftover records before you leave work.",
+                question: "Do you take matters into your own hands by secretly deleting the data yourself?"
             }
         ],
-        ownerQuestion: "Does your answer change when an individual technician carries the sole moral burden for a multi-million dollar corporate system?"
+        ownerQuestion: "Does your answer change when an individual employee is forced to bear the ethical burden of a multi-million dollar corporate system?"
     }
 };
 
@@ -612,16 +734,36 @@ function renderDilemmaTradeoffs(choiceId) {
     const items = role.dilemma.tradeoffs[choiceId] || [];
     const levelLabels = { positive: "Positive", mixed: "Mixed", negative: "Negative" };
 
-    dilemmaTradeoffGridEl.innerHTML = items
-        .map(
-            (item) => `
-        <div class="tradeoff-item tradeoff-${item.level}">
-            <span class="tradeoff-indicator tradeoff-dot-${item.level}" aria-hidden="true"></span>
-            <span class="tradeoff-dimension">${item.dimension}</span>
-            <span class="tradeoff-level-label">${levelLabels[item.level]}</span>
-        </div>`
-        )
-        .join("");
+    // Dynamic consequence card for this specific choice
+    const consequence = role.dilemma.consequences ? role.dilemma.consequences[choiceId] : null;
+    let consequenceHtml = "";
+    if (consequence) {
+        consequenceHtml = `
+            <div class="consequence-card">
+                <div class="consequence-badge">IMMEDIATE AFTERMATH</div>
+                <h4>${consequence.title}</h4>
+                <p class="consequence-story">${consequence.story}</p>
+                <div class="consequence-impact"><strong>Key Impact:</strong> ${consequence.impact}</div>
+            </div>
+        `;
+    }
+
+    dilemmaTradeoffGridEl.innerHTML = `
+        ${consequenceHtml}
+        <div class="tradeoff-matrix-title">PROJECTED TRADEOFFS</div>
+        <div class="tradeoff-subgrid">
+            ${items
+                .map(
+                    (item) => `
+                <div class="tradeoff-item tradeoff-${item.level}">
+                    <span class="tradeoff-indicator tradeoff-dot-${item.level}" aria-hidden="true"></span>
+                    <span class="tradeoff-dimension">${item.dimension}</span>
+                    <span class="tradeoff-level-label">${levelLabels[item.level]}</span>
+                </div>`
+                )
+                .join("")}
+        </div>
+    `;
 
     dilemmaTradeoffPanelEl.classList.remove("hidden");
     dilemmaDiscussionTextEl.textContent = role.dilemma.discussion;
@@ -688,6 +830,52 @@ function setupStage6Ownership() {
     }
 }
 
+// ── Stage 7: Reflection & Email Results ──────────────────────────────────────
+
+function getResultsSummaryText() {
+    if (!state.selectedRole) return "";
+    const role = roleProfiles[state.selectedRole];
+    const dataStr = state.selectedDataTypes.length ? state.selectedDataTypes.join(", ") : "None chosen";
+    const choiceObj = role.dilemma.choices.find(c => c.id === state.dilemmaChoice);
+    const dilemmaStr = choiceObj ? choiceObj.label : "No choice made";
+    const ownerStr = state.ownerChoice || "No position chosen";
+
+    let twistText = state.twistAnswers
+        .map((a, i) => `  - Twist ${i + 1}: ${a ? a.toUpperCase() : "Skipped"}`)
+        .join("\n");
+
+    let consumerDetail = "";
+    if (state.selectedRole === "consumer") {
+        const consentLabels = { agree: "Agreed without reading", decline: "Declined" };
+        consumerDetail = `Terms Acceptance: ${state.consentChoice ? consentLabels[state.consentChoice] : "N/A"}\nConfidence in User Understanding: ${state.confidenceRating || "N/A"}/5\n`;
+    }
+
+    return `
+========================================
+23andMe Ethics Simulation Results
+IDS 704: Ethics in Data Science
+========================================
+
+Role Played: ${role.name}
+
+${consumerDetail}Data Types Selected for Sharing/Audit:
+${dataStr}
+
+Core Dilemma Decision:
+${dilemmaStr}
+
+Twist Responses:
+${twistText}
+
+Data Ownership Stance:
+${ownerStr}
+
+========================================
+Generated via 23andMe Crisis Desk
+========================================
+`.trim();
+}
+
 function setupStage7Reflection() {
     if (!state.selectedRole) return;
     const currentRole = roleProfiles[state.selectedRole];
@@ -736,7 +924,40 @@ function setupStage7Reflection() {
         </div>
     `;
 
-    // 2. Role Swap Preview
+    // 2. Email share section
+    const emailContainerEl = document.getElementById("email-results-container");
+    if (emailContainerEl) {
+        emailContainerEl.innerHTML = `
+            <div class="email-results-card">
+                <div class="email-card-header">
+                    <span class="email-icon">✉️</span>
+                    <h4>SHARE RESULTS WITH INSTRUCTORS</h4>
+                </div>
+                <p class="email-desc">Submit your scenario decisions directly to your discussion leads or download a copy for classroom debate.</p>
+                <div class="email-form-grid">
+                    <div class="email-input-group">
+                        <label for="recipient-email-1">Recipient 1 (Ammy Lin):</label>
+                        <input type="email" id="recipient-email-1" value="${DEFAULT_RECIPIENT_EMAILS[0]}" placeholder="ammy.lin@duke.edu" />
+                    </div>
+                    <div class="email-input-group">
+                        <label for="recipient-email-2">Recipient 2 (Tonantzin Real Rojas):</label>
+                        <input type="email" id="recipient-email-2" value="${DEFAULT_RECIPIENT_EMAILS[1]}" placeholder="tonantzin.realrojas@duke.edu" />
+                    </div>
+                </div>
+                <div class="email-btn-row">
+                    <button id="send-email-btn" class="primary-btn email-action-btn">
+                        <span>📧</span> OPEN IN EMAIL CLIENT
+                    </button>
+                    <button id="copy-summary-btn" class="secondary-btn email-action-btn">
+                        <span>📋</span> COPY RESULTS TEXT
+                    </button>
+                </div>
+                <p id="email-status-msg" class="email-status-msg hidden"></p>
+            </div>
+        `;
+    }
+
+    // 3. Role Swap Preview
     const roleSwapGridEl = document.getElementById("role-swap-grid");
     const otherRoles = Object.values(roleProfiles).filter(r => r.id !== state.selectedRole);
 
@@ -751,7 +972,7 @@ function setupStage7Reflection() {
         `)
         .join("");
 
-    // 3. Synthesis questions
+    // 4. Synthesis questions
     const synthesisListEl = document.getElementById("synthesis-list");
     synthesisListEl.innerHTML = `
         <div class="synthesis-item">
@@ -838,6 +1059,41 @@ document.addEventListener("click", (event) => {
     // ── Restart ──
     if (event.target.closest("#restart-btn")) {
         restartSimulation();
+        return;
+    }
+
+    // ── Email Actions (Stage 7) ──
+    if (event.target.closest("#send-email-btn")) {
+        const email1 = document.getElementById("recipient-email-1")?.value.trim() || "";
+        const email2 = document.getElementById("recipient-email-2")?.value.trim() || "";
+        const recipients = [email1, email2].filter(Boolean).join(",");
+
+        const role = roleProfiles[state.selectedRole];
+        const subject = encodeURIComponent(`[IDS 704 Ethics] ${role ? role.name : "Simulation"} Decision Results`);
+        const body = encodeURIComponent(getResultsSummaryText());
+
+        const mailtoUrl = `mailto:${recipients}?subject=${subject}&body=${body}`;
+        window.open(mailtoUrl, "_blank");
+
+        const statusEl = document.getElementById("email-status-msg");
+        if (statusEl) {
+            statusEl.textContent = "Opened your default email client with your results pre-populated!";
+            statusEl.classList.remove("hidden");
+        }
+        return;
+    }
+
+    if (event.target.closest("#copy-summary-btn")) {
+        const summaryText = getResultsSummaryText();
+        navigator.clipboard.writeText(summaryText).then(() => {
+            const statusEl = document.getElementById("email-status-msg");
+            if (statusEl) {
+                statusEl.textContent = "✓ Results copied to clipboard! You can paste them anywhere.";
+                statusEl.classList.remove("hidden");
+            }
+        }).catch(() => {
+            alert("Could not automatically copy text. Please select and copy manually.");
+        });
         return;
     }
 

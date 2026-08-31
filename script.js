@@ -345,6 +345,7 @@ const progressFillEl = document.getElementById("progress-fill");
 const roleBadgeEl = document.getElementById("role-badge");
 const roleBadgeIconEl = document.getElementById("role-badge-icon");
 const roleBadgeLabelEl = document.getElementById("role-badge-label");
+const backBtnEl = document.getElementById("back-btn");
 
 const screens = [...document.querySelectorAll(".screen")];
 
@@ -422,6 +423,10 @@ function showScreen(index) {
     screens.forEach((screen, screenIndex) => {
         screen.classList.toggle("active", screenIndex === state.currentStage);
     });
+
+    if (backBtnEl) {
+        backBtnEl.classList.toggle("hidden", state.currentStage === 0);
+    }
 
     updateProgress();
     syncStageSpecificUI();
@@ -824,6 +829,12 @@ function restartSimulation() {
 // ── Click Event Delegation ───────────────────────────────────────────────────
 
 document.addEventListener("click", (event) => {
+    // ── Back Button ──
+    if (event.target.closest("#back-btn")) {
+        goToPrevious();
+        return;
+    }
+
     // ── Restart ──
     if (event.target.closest("#restart-btn")) {
         restartSimulation();

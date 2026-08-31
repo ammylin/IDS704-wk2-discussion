@@ -119,6 +119,46 @@ button {
     border-radius: 24px 24px 0 0;
 }
 
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: rgba(240, 244, 252, 0.95);
+    border: 1px solid rgba(86, 111, 164, 0.22);
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #ffffff;
+    border-color: var(--purple);
+    transform: translateX(-2px);
+    box-shadow: 0 4px 12px rgba(101, 72, 216, 0.15);
+}
+
+.back-arrow {
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.back-btn:hover .back-arrow {
+    transform: translateX(-2px);
+}
+
 .brand-block {
     display: flex;
     flex-direction: column;

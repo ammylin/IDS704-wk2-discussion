@@ -837,17 +837,21 @@ function getResultsSummaryText() {
     const role = roleProfiles[state.selectedRole];
     const dataStr = state.selectedDataTypes.length ? state.selectedDataTypes.join(", ") : "None chosen";
     const choiceObj = role.dilemma.choices.find(c => c.id === state.dilemmaChoice);
-    const dilemmaStr = choiceObj ? choiceObj.label : "No choice made";
+    const dilemmaStr = choiceObj ? `${choiceObj.label}\n   (${choiceObj.desc})` : "No choice made";
     const ownerStr = state.ownerChoice || "No position chosen";
 
-    let twistText = state.twistAnswers
-        .map((a, i) => `  - Twist ${i + 1}: ${a ? a.toUpperCase() : "Skipped"}`)
-        .join("\n");
+    const twists = role.twists || [];
+    let twistText = twists
+        .map((t, i) => {
+            const answer = state.twistAnswers[i] ? state.twistAnswers[i].toUpperCase() : "SKIPPED / UNANSWERED";
+            return `  Twist 0${i + 1}: "${t.title}"\n  Prompt: ${t.question}\n  → Player Choice: ${answer}`;
+        })
+        .join("\n\n");
 
     let consumerDetail = "";
     if (state.selectedRole === "consumer") {
         const consentLabels = { agree: "Agreed without reading", decline: "Declined" };
-        consumerDetail = `Terms Acceptance: ${state.consentChoice ? consentLabels[state.consentChoice] : "N/A"}\nConfidence in User Understanding: ${state.confidenceRating || "N/A"}/5\n`;
+        consumerDetail = `Terms Acceptance: ${state.consentChoice ? consentLabels[state.consentChoice] : "N/A"}\nConfidence in User Understanding: ${state.confidenceRating || "N/A"}/5\n\n`;
     }
 
     return `
@@ -856,15 +860,15 @@ function getResultsSummaryText() {
 IDS 704: Ethics in Data Science
 ========================================
 
-Role Played: ${role.name}
+Role Played: ${role.icon} ${role.name}
 
-${consumerDetail}Data Types Selected for Sharing/Audit:
+${consumerDetail}Data Categories Selected:
 ${dataStr}
 
 Core Dilemma Decision:
 ${dilemmaStr}
 
-Twist Responses:
+Twist Decisions & Scenarios:
 ${twistText}
 
 Data Ownership Stance:
@@ -901,6 +905,20 @@ function setupStage7Reflection() {
         `;
     }
 
+    const twists = currentRole.twists || [];
+    let twistsRecapHtml = twists
+        .map((t, i) => {
+            const ans = state.twistAnswers[i] ? state.twistAnswers[i].toUpperCase() : "Skipped";
+            return `
+                <div class="recap-twist-item">
+                    <span class="recap-twist-tag">Twist 0${i + 1}</span>
+                    <span class="recap-twist-title">${t.title}</span>
+                    <span class="recap-twist-ans">Choice: <strong>${ans}</strong></span>
+                </div>
+            `;
+        })
+        .join("");
+
     recapEl.innerHTML = `
         <h3>YOUR PATH SUMMARY</h3>
         <div class="recap-grid">
@@ -917,7 +935,13 @@ function setupStage7Reflection() {
                 <span class="recap-label">Core Crisis Decision</span>
                 <span class="recap-value">${dilemmaStr}</span>
             </div>
-            <div class="recap-item">
+            <div class="recap-item recap-item-wide">
+                <span class="recap-label">Twist Complications Faced</span>
+                <div class="recap-twists-list">
+                    ${twistsRecapHtml}
+                </div>
+            </div>
+            <div class="recap-item recap-item-wide">
                 <span class="recap-label">Data Ownership Stance</span>
                 <span class="recap-value">${ownerStr}</span>
             </div>
